@@ -5,7 +5,6 @@ import Image from "next/image";
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log("HERE");
   return (
     <>
       {providers
@@ -17,7 +16,9 @@ export default function SignIn({
               <button
                 className="text-white drop-shadow-xl text-lg flex flex-row items-center justify-center align-middle px-4 py-2 my-2 bg-black rounded-full"
                 onClick={() =>
-                  signIn(provider.id, { callbackUrl: "http://localhost:3000/" })
+                  signIn(provider.id, {
+                    callbackUrl: "http://localhost:3000/dashboard",
+                  })
                 }
               >
                 <Image

@@ -8,7 +8,7 @@ const Dashboard = () => {
     return (
       <>
         {console.log(session)}
-        Signed in as {session.expires} <br />
+        Signed in as {session.accessToken} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
