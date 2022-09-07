@@ -27,9 +27,9 @@ const Search = () => {
 
   const search = async () => {
     const res = await fetch(`/api/spotify/search?q=${query}`);
-    const data = await res.json();
-    if (data?.tracks) {
-      setTracks(data?.tracks);
+    const data = (await res.json()).data;
+    if (data?.tracks?.items) {
+      setTracks(data?.tracks?.items);
     } else {
       setTracks([]);
     }

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Player from "../components/Player";
+import Player from "../components/Player/index";
 import Search from "../components/Search";
 
 const Home: NextPage = () => {

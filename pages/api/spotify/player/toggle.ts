@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     access_token,
     device_id as string
   );
-  return res.status(200).json(response);
+  return res.status(200).send({});
 };
 
 export default handler;

@@ -30,7 +30,7 @@ export default async function handler(
     const token = (await tokenResponse.json())?.access_token;
 
     var searchResponse = await fetch(
-      `https://api.spotify.com/v1/search?q=${q}&type=track&limit=5`,
+      `https://api.spotify.com/v1/search?q=${q}&type=track,album,artist&limit=5`,
       {
         method: "GET",
         headers: {
@@ -41,10 +41,11 @@ export default async function handler(
       }
     );
 
-    const tracks = (await searchResponse.json()).tracks?.items;
+    const data = await searchResponse.json();
+    console.log(data);
 
-    if (tracks) {
-      return res.status(200).json({ tracks });
+    if (data) {
+      return res.status(200).json({ data });
     }
   }
   res.status(200).json({ tracks: [] });

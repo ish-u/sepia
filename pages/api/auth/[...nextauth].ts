@@ -41,19 +41,19 @@ export default NextAuth({
       if (account && user) {
         token.refreshToken = account.refresh_token;
         token.accessToken = account.access_token;
-        token.expiresAt = Date.now() + account.expires_at * 1000;
+        token.expiresAt = (account.expires_at as number) * 1000;
       }
 
       // return the original token till it's valid
-      if (Date.now() < token.expiresAt) {
+      if (Date.now() < (token?.expiresAt ? token.expiresAt : 0)) {
         return token;
       }
 
       // update token
-      const updatedToken = await refreshAccessToken(token.refreshToken);
+      const updatedToken = await refreshAccessToken(token.refreshToken || "");
       if (updatedToken) {
         token.accessToken = updatedToken.access_token;
-        token.expiresAt = Date.now() + updatedToken.expires_at * 1000;
+        token.expiresAt = Date.now() + updatedToken.expires_in * 1000;
       }
       return token;
     },
