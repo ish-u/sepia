@@ -6,13 +6,14 @@ import { ActionType } from "../context/actions";
 
 const API_ENDPOINT: string = "https://api.spotify.com/v1";
 
-const Search = () => {
+const SearchBar = () => {
   const { state, dispatch } = useContext(AppContext);
 
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState([]);
 
   const playSong = async (id: string) => {
+    console.log(id);
     const res = await fetch(
       `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
     );
@@ -44,7 +45,6 @@ const Search = () => {
 
   return (
     <div className="flex flex-col px-8 py-4">
-      <span className="text-3xl font-bold mx-auto">Search for a Song!</span>
       <input
         className="rounded-lg px-4 py-2 my-4  text-xl outline-none focus:outline-none mx-auto"
         type="text"
@@ -59,7 +59,8 @@ const Search = () => {
           <div
             className="flex flex-row items-center align-middle
                       text-white m-2 p-4 hover:cursor-pointer 
-                      hover:bg-slate-600/25 break-words"
+                      bg-slate-600/75
+                      hover:bg-slate-600 break-words"
           >
             <Image
               height="96"
@@ -80,4 +81,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchBar;
