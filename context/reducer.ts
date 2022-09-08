@@ -2,6 +2,8 @@ import { AppActions } from "./actions";
 import { ActionType } from "./actions";
 import { AppState } from "./state";
 
+
+
 export const AppReducer = (state: AppState, action: AppActions): AppState => {
   switch (action.type) {
     case ActionType.Toggle:
@@ -12,6 +14,8 @@ export const AppReducer = (state: AppState, action: AppActions): AppState => {
       return { ...state, device_id: action.payload.device_id };
     case ActionType.Player:
       return { ...state, player: action.payload.player };
+    case ActionType.SetUser:
+      return { ...state, user: action.payload.user };
     default:
       return state;
   }

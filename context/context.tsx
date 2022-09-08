@@ -7,6 +7,7 @@ const InitialState: AppState = {
   device_id: "",
   player: undefined,
   id: "",
+  user: undefined,
 };
 
 export const AppContext = createContext<{

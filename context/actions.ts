@@ -1,8 +1,11 @@
+import { SpotifyUser } from "../pages/api/spotify/user/me";
+
 export enum ActionType {
   Toggle,
   Change,
   Device,
   Player,
+  SetUser,
 }
 
 export interface Toggle {
@@ -25,4 +28,9 @@ export interface Player {
   payload: { player: Spotify.Player };
 }
 
-export type AppActions = Toggle | Change | Device | Player;
+export interface SetUser {
+  type: ActionType.SetUser;
+  payload: { user: SpotifyUser };
+}
+
+export type AppActions = Toggle | Change | Device | Player | SetUser;
