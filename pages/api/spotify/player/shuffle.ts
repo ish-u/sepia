@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+const API_ENDPOINT: string = "https://api.spotify.com/v1";
 
-const playSong = async (
-  id: string,
+const toggleShuffle = async (
+  device_id: string,
   access_token: string,
-  device_id: string
+  shuffle: boolean
 ) => {
   const options = {
     method: "PUT",
@@ -13,29 +14,26 @@ const playSong = async (
       Authorization: "Bearer " + access_token,
       Accept: "application/json",
     },
-    body: JSON.stringify({
-      uris: [`spotify:track:${id}`],
-    } as any),
   };
+
   const res = await fetch(
-    `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+    `${API_ENDPOINT}/me/player/shuffle?state=${shuffle}&device_id=${device_id}`,
     options
   );
   return res.status;
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { query, method } = req;
   const session = await getSession({ req });
-  const { id, device_id } = query;
+  const { query } = req;
+  const { device_id, shuffle } = query;
   const access_token = session?.accessToken || "";
-
-  const response = await playSong(
-    id as string,
+  const response = await toggleShuffle(
+    device_id as string,
     access_token,
-    device_id as string
+    shuffle === "true" ? true : false
   );
-  return res.status(200).send({});
+  return res.status(response).send({});
 };
 
 export default handler;

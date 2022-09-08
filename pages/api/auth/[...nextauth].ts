@@ -45,6 +45,11 @@ export default NextAuth({
       }
 
       // return the original token till it's valid
+      // console.log(
+      //   Date.now(),
+      //   token?.expiresAt ? token.expiresAt : 0,
+      //   token.accessToken
+      // );
       if (Date.now() < (token?.expiresAt ? token.expiresAt : 0)) {
         return token;
       }
