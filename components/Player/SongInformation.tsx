@@ -3,10 +3,10 @@ import Image from "next/image";
 const SongInformation = ({ track }: { track: Spotify.Track }) => {
   return (
     <div className="flex ">
-      <div className="m-2 flex ">
+      <div className="m-2 flex">
         <Image
           className="object-cover"
-          src={track.album.images[1].url}
+          src={track.album.images[0].url}
           height={track.album.images[1].height || 64}
           width={track.album.images[1].width || 64}
         ></Image>

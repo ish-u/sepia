@@ -87,7 +87,7 @@ const Player = () => {
   }, [status]);
 
   return (
-    <div className="fixed w-full bottom-0 left-0 bg-slate-400">
+    <div className="fixed w-full bottom-0 left-0 bg-slate-500 text-white">
       <div className="m-2">
         {state.player !== undefined &&
           state.device_id !== "" &&
