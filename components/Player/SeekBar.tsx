@@ -34,7 +34,7 @@ const SeekBar = ({ player }: { player: Spotify.Player }) => {
       <div>{getFormattedTime(position)}</div>
       <div className="flex flex-grow mx-4">
         <input
-          className="h-1 rounded-full appearance-none w-full"
+          className="h-1 w-full"
           min="0"
           max={duration}
           value={position}

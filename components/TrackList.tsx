@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FiPlay, FiClock } from "react-icons/fi";
 import { AppContext } from "../context/context";
 import { ActionType } from "../context/actions";
@@ -14,11 +14,9 @@ const Track = ({ track }: { track: SpotifyApi.TrackObjectSimplified }) => {
   const [showPlay, setShowPlay] = useState(false);
 
   const playSong = async (id: string) => {
-    console.log(id);
-    const res = await fetch(
+    await fetch(
       `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
     );
-    console.log(await res.json());
   };
 
   return (
@@ -34,7 +32,7 @@ const Track = ({ track }: { track: SpotifyApi.TrackObjectSimplified }) => {
         playSong(track.id);
       }}
     >
-      <div className="mr-6 flex items-center text-lg">
+      <div className="flex items-center text-lg w-12">
         {showPlay ? <FiPlay /> : track.track_number}
       </div>
       <div className="flex flex-col grow">
@@ -59,7 +57,7 @@ const TrackList = ({
     <>
       <div className="px-8 text-black/75 font-thin mt-4">
         <div className="w-full flex px-4 py-2 mx-1">
-          <div className="mr-8 flex items-center text-lg">#</div>
+          <div className="w-12 flex items-center text-lg">#</div>
           <div className="flex flex-col grow">TITLE</div>
           <div className="flex items-center">
             <FiClock />
