@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState, useRef } from "react";
 import { AppContext } from "../../context/context";
 import { ActionType } from "../../context/actions";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import PlayerControls from "./PlayerControls";
 import SeekBar from "./SeekBar";
 import SideControls from "./SideControls";
@@ -12,7 +12,7 @@ const Player = () => {
   const { state, dispatch } = useContext(AppContext);
 
   // cheking the session state for checking Authentication and to get the accessToken
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   // state to store the currenlty playing track information
   const [track, setTrack] = useState<Spotify.Track>();
@@ -32,11 +32,12 @@ const Player = () => {
         // Initializing the Player Object
         const player = new window.Spotify.Player({
           name: "sepia",
-          getOAuthToken: (cb) => {
+          getOAuthToken: async (cb) => {
             console.log("CALLBACK");
-            cb(session.accessToken as string);
+            const currentSession = await getSession();
+            return cb(currentSession?.accessToken as string);
           },
-          volume: 0.3,
+          volume: 0.5,
         });
 
         // adding the player object to the AppContext
@@ -86,8 +87,8 @@ const Player = () => {
   }, [status]);
 
   return (
-    <div className="fixed w-full bottom-0 left-0  bg-slate-400">
-      <div className="m-4">
+    <div className="fixed w-full bottom-0 left-0 bg-slate-400">
+      <div className="m-2">
         {state.player !== undefined &&
           state.device_id !== "" &&
           track !== undefined && (

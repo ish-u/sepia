@@ -1,76 +1,121 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/context";
-
+import {
+  FiPlay,
+  FiPause,
+  FiSkipBack,
+  FiSkipForward,
+  FiRepeat,
+  FiShuffle,
+} from "react-icons/fi";
+import { SpotifyRepeatState } from "../../pages/api/spotify/player/repeat";
 const PlayerControls = () => {
   const { state, dispatch } = useContext(AppContext);
 
+  // SHUFFLE
+  const [shuffle, setShuffle] = useState(false);
+  const getShuffleState = async () => {
+    const shuffle = (await state.player?.getCurrentState())?.shuffle;
+    setShuffle(shuffle || false);
+  };
+
+  const toggleShuffle = async () => {
+    const shuffle =
+      (await state.player?.getCurrentState())?.shuffle === true
+        ? "false"
+        : "true";
+    const resposne = await fetch(
+      `/api/spotify/player/shuffle?shuffle=${shuffle}&device_id=${state.device_id}`
+    );
+  };
+
+  // REPEAT
+  const [repeat, setRepeat] = useState<SpotifyRepeatState>(
+    SpotifyRepeatState.off
+  );
+  const getRepeatState = async () => {
+    const repeatState = (await state.player?.getCurrentState())?.repeat_mode;
+    switch (repeatState) {
+      case 0:
+        setRepeat(SpotifyRepeatState.off);
+        break;
+      case 1:
+        setRepeat(SpotifyRepeatState.track);
+        break;
+      case 2:
+        setRepeat(SpotifyRepeatState.context);
+        break;
+      default:
+        setRepeat(SpotifyRepeatState.off);
+        break;
+    }
+  };
+  const toggleRepeat = async () => {
+    const resposne = await fetch(
+      `/api/spotify/player/repeat?repeat=${repeat}&device_id=${state.device_id}`
+    );
+    setRepeat((await resposne.json())?.repeat || SpotifyRepeatState.off);
+  };
+
+  useEffect(() => {
+    getShuffleState();
+    getRepeatState();
+  }, []);
+
   return (
     <div className="flex justify-center align-middle items-center m-1">
-      <div className="p-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-8 h-8"
-          fill="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z"
-          />
-        </svg>
+      <div
+        className="p-2"
+        onClick={async () => {
+          await toggleRepeat();
+        }}
+      >
+        {repeat === SpotifyRepeatState.off && <FiRepeat className="w-4 h-4" />}
+        {repeat === SpotifyRepeatState.track && (
+          <FiRepeat className="w-4 h-4 bg-green-400" />
+        )}
+        {repeat === SpotifyRepeatState.context && (
+          <FiRepeat className="w-4 h-4 bg-red-400" />
+        )}
+      </div>
+      <div
+        className="p-2"
+        onClick={async () => {
+          await state.player?.previousTrack();
+        }}
+      >
+        <FiSkipBack className="h-6 w-6" />
+      </div>
+      <div
+        className="p-2 hover:cursor-pointer"
+        onClick={async () => {
+          await state.player?.togglePlay();
+        }}
+      >
+        {!state.active ? (
+          <FiPlay className="h-8 w-8" />
+        ) : (
+          <FiPause className="h-8 w-8" />
+        )}
       </div>
 
       <div
         className="p-2"
         onClick={async () => {
-          state.player?.togglePlay();
+          await state.player?.nextTrack();
         }}
       >
-        {!state.active ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-10 w-10"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-              clipRule="evenodd"
-            />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-10 w-10"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        )}
+        <FiSkipForward className="h-6 w-6" />
       </div>
-
-      <div className="p-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-8 h-8"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062A1.125 1.125 0 013 16.81V8.688zM12.75 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062a1.125 1.125 0 01-1.683-.977V8.688z"
-          />
-        </svg>
+      <div
+        className="p-2"
+        onClick={async () => {
+          await toggleShuffle();
+          setShuffle(!shuffle);
+        }}
+      >
+        {shuffle === true && <FiShuffle className="w-4 h-4 text-white" />}
+        {shuffle === false && <FiShuffle className="w-4 h-4" />}
       </div>
     </div>
   );

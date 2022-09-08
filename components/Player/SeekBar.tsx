@@ -31,7 +31,6 @@ const SeekBar = ({ player }: { player: Spotify.Player }) => {
   }, []);
   return (
     <div className="flex justify-center items-center">
-      {/* <div>{`${(position / 60) | 0}:${(position % 60).toFixed(0)}`}</div> */}
       <div>{getFormattedTime(position)}</div>
       <div className="flex flex-grow mx-4">
         <input
@@ -45,7 +44,7 @@ const SeekBar = ({ player }: { player: Spotify.Player }) => {
           type="range"
         />
       </div>
-      <div>{`${(duration / 60) | 0}:${(duration % 60).toFixed(0)}`}</div>
+      <div>{getFormattedTime(duration)}</div>
     </div>
   );
 };
