@@ -34,13 +34,14 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
             src={album.images[0].url}
             height={240 || album.images[0].height}
             width={240 || album.images[0].width}
+            objectFit="cover"
           />
         </div>
         <div className="grow py-8 flex flex-col justify-end">
           <div className="text-xs m-2 font-bold">
             {album.type.toUpperCase()}
           </div>
-          <div className="text-8xl font-bold">{album.name}</div>
+          <div className="text-6xl font-bold">{album.name}</div>
           <div className="text-md  m-2 flex font-bold">
             {album.artists.map((artist) => {
               return (

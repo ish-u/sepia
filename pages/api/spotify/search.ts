@@ -30,7 +30,7 @@ export default async function handler(
     const token = (await tokenResponse.json())?.access_token;
 
     var searchResponse = await fetch(
-      `https://api.spotify.com/v1/search?q=${q}&type=track,album,artist&limit=5`,
+      `https://api.spotify.com/v1/search?q=${q}&type=track,album,artist,playlist&limit=5`,
       {
         method: "GET",
         headers: {
