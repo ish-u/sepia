@@ -3,6 +3,8 @@ import { getSession } from "next-auth/react";
 import { getAlbum } from "../api/spotify/albums/[id]";
 import Image from "next/image";
 import TrackList from "../../components/TrackList";
+import Head from "next/head";
+import Link from "next/link";
 
 const getFormattedTime = (seconds: number) => {
   return (
@@ -27,26 +29,35 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
 
   return (
     <div className="flex flex-col mx-36 mb-4">
+      <Head>
+        <title>
+          {album.name} | {album.artists.map((artist) => artist.name)}
+        </title>
+        <link rel="icon" href={album.images[0].url} />
+      </Head>
       {/* TOP AREA */}
-      <div className="flex">
-        <div className="p-8">
+      <div className="flex justify-start ">
+        <div className="p-8 relative ">
           <Image
             src={album.images[0].url}
-            height={240 || album.images[0].height}
-            width={240 || album.images[0].width}
-            objectFit="cover"
+            height={240}
+            width={240}
+            layout="fixed"
           />
         </div>
         <div className="grow py-8 flex flex-col justify-end">
           <div className="text-xs m-2 font-bold">
             {album.type.toUpperCase()}
           </div>
-          <div className="text-6xl font-bold">{album.name}</div>
+          <div className="text-6xl font-bold break-words">{album.name}</div>
           <div className="text-md  m-2 flex font-bold">
             {album.artists.map((artist) => {
               return (
                 <div className="flex mr-1">
-                  <div>{artist.name} -</div>
+                  <div className="hover:underline">
+                    <Link href={`/artist/${artist.id}`}>{artist.name}</Link>
+                  </div>
+                  <span> - </span>
                 </div>
               );
             })}

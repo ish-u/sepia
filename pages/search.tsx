@@ -45,7 +45,7 @@ const Search = () => {
         <>
           <div className="albums mb-4">
             <div className="text-2xl font-bold mx-2 my-1">Albums</div>
-            <div className="flex justify-between">
+            <div className="flex justify-start">
               {data?.albums?.items.map((album) => {
                 return (
                   <SearchCard
@@ -65,7 +65,7 @@ const Search = () => {
           </div>
           <div className="artists mb-4">
             <div className="text-2xl font-bold mx-2 my-1">Artists</div>
-            <div className="flex justify-between">
+            <div className="flex justify-start">
               {data?.artists?.items.map((artist) => {
                 return (
                   <SearchCard
@@ -83,7 +83,7 @@ const Search = () => {
           </div>
           <div className="playlist mb-4">
             <div className="text-2xl font-bold mx-2 my-1">Playlists</div>
-            <div className="flex justify-between">
+            <div className="flex justify-start">
               {data?.playlists?.items.map((playlist) => {
                 return (
                   <SearchCard
