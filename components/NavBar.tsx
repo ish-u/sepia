@@ -1,9 +1,33 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/context";
 import Image from "next/image";
-import { FiHome, FiSearch, FiBookmark } from "react-icons/fi";
+import {
+  FiHome,
+  FiSearch,
+  FiBookmark,
+  FiArrowRight,
+  FiArrowLeft,
+} from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+const BackButton = () => {
+  const router = useRouter();
+  const goBack = () => {
+    router.back();
+  };
+
+  return (
+    <div
+      onClick={goBack}
+      className={`p-2 m-2 rounded-full text-white bg-slate-500
+                  flex items-center text-lg hover:cursor-pointer
+                  duration-150 ease-in-out hover:bg-slate-700 font-semibold`}
+    >
+      <FiArrowLeft />
+    </div>
+  );
+};
 
 const NavButton = ({
   title,
@@ -39,7 +63,8 @@ const NavBar = () => {
   const { state, dispatch } = useContext(AppContext);
   return (
     <div className="flex items-center w-full h-24 justify-around backdrop-blur-lg">
-      <div className="flex">
+      <div className="flex items-center">
+        <BackButton />
         <NavButton title="Home" icon={<FiHome />} link="/" />
         <NavButton title="Search" icon={<FiSearch />} link="/search" />
         <NavButton title="Your Library" icon={<FiBookmark />} link="/library" />

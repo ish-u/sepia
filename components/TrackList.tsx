@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { FiPlay, FiClock } from "react-icons/fi";
 import { AppContext } from "../context/context";
-import { ActionType } from "../context/actions";
-
+import Link from "next/link";
 const getFormattedTime = (seconds: number) => {
   return (
     Math.floor(seconds / 60) + ":" + ("0" + Math.floor(seconds % 60)).slice(-2)
@@ -28,17 +27,30 @@ const Track = ({ track }: { track: SpotifyApi.TrackObjectSimplified }) => {
       onMouseLeave={() => {
         setShowPlay(false);
       }}
-      onClick={() => {
-        playSong(track.id);
-      }}
     >
-      <div className="flex items-center text-lg w-12">
+      <div
+        onClick={() => {
+          playSong(track.id);
+        }}
+        className="flex items-center text-lg w-12"
+      >
         {showPlay ? <FiPlay /> : track.track_number}
       </div>
       <div className="flex flex-col grow">
         <div className="text-xl font-semibold">{track.name}</div>
         <div className="text-md text-black/75">
-          {track.artists.map((artist) => artist.name + "")}
+          {track.artists.map((artist, idx) => {
+            return (
+              <>
+                <Link className="flex flex-col" href={`/artist/${artist.id}`}>
+                  <span className="hover:underline hover:text-black">
+                    {artist.name}
+                  </span>
+                </Link>
+                <span>{idx !== track.artists.length - 1 ? ", " : ""}</span>
+              </>
+            );
+          })}
         </div>
       </div>
       <div className="flex items-center">
