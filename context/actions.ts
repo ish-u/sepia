@@ -1,11 +1,12 @@
 import { SpotifyUser } from "../pages/api/spotify/user/me";
-
+import { queue } from "./state";
 export enum ActionType {
   Toggle,
   Change,
   Device,
   Player,
   SetUser,
+  UpdateQueue,
 }
 
 export interface Toggle {
@@ -33,4 +34,15 @@ export interface SetUser {
   payload: { user: SpotifyUser };
 }
 
-export type AppActions = Toggle | Change | Device | Player | SetUser;
+export interface UpdateQueue {
+  type: ActionType.UpdateQueue;
+  payload: { queue: queue };
+}
+
+export type AppActions =
+  | Toggle
+  | Change
+  | Device
+  | Player
+  | SetUser
+  | UpdateQueue;

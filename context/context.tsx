@@ -8,6 +8,7 @@ const InitialState: AppState = {
   player: undefined,
   id: "",
   user: undefined,
+  queue: undefined,
 };
 
 export const AppContext = createContext<{
