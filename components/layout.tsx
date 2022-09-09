@@ -10,6 +10,7 @@ import { ActionType } from "../context/actions";
 export default function Layout({ children }: { children: ReactElement }) {
   const { data: session, status } = useSession();
   const { state, dispatch } = useContext(AppContext);
+
   const getCurrentUser = async () => {
     const response = await fetch("/api/spotify/user/me");
     if (response.status === 200) {
@@ -18,16 +19,38 @@ export default function Layout({ children }: { children: ReactElement }) {
     }
   };
 
+  const getUserQueue = async () => {
+    const res = await fetch("/api/spotify/player/queue");
+    const userQueue = (await res.json()).data;
+    if (res.status === 200) {
+      dispatch({
+        type: ActionType.UpdateQueue,
+        payload: {
+          queue: userQueue,
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     if (state.user === undefined && status === "authenticated") {
-      getCurrentUser();
+      const fetchData = setInterval(() => {
+        if (session?.accessToken) {
+          getUserQueue();
+          getCurrentUser();
+        }
+      }, 1000);
+
+      () => {
+        clearInterval(fetchData);
+      };
     }
-  }, [status, state]);
+  }, [status]);
   return (
     <div className="bg-[#FFDCCC]">
-      <NavBar />
+      {<NavBar />}
       {children}
-      <Player />
+      {<Player />}
     </div>
   );
 }

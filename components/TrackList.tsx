@@ -15,26 +15,30 @@ export const Track = ({
   idx,
   showIdx,
   showArtist,
+  album,
   img,
 }: {
   track: SpotifyApi.TrackObjectSimplified;
   idx?: number;
   showIdx: boolean;
   showArtist: boolean;
+  album?: SpotifyApi.AlbumObjectSimplified;
   img?: SpotifyApi.ImageObject;
 }) => {
   const { state, dispatch } = useContext(AppContext);
   const [showPlay, setShowPlay] = useState(false);
 
   const playSong = async (id: string) => {
-    await fetch(
-      `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
-    );
+    if (state.device_id) {
+      await fetch(
+        `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
+      );
+    }
   };
 
   return (
     <div
-      className="w-full flex px-4 py-2 m-1 hover:bg-slate-400/50 rounded-md hover:cursor-pointer"
+      className="w-full flex  px-4 py-2 m-1 hover:bg-slate-400/50 rounded-md hover:cursor-pointer"
       onMouseEnter={() => {
         setShowPlay(true);
       }}
@@ -68,24 +72,35 @@ export const Track = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col grow">
-        <div className="text-xl font-semibold">{track.name}</div>
-        <div className="text-md text-black/75">
-          {showArtist === true &&
-            track.artists.map((artist, idx) => {
-              return (
-                <>
-                  <Link className="flex flex-col" href={`/artist/${artist.id}`}>
-                    <span className="hover:underline hover:text-black">
-                      {artist.name}
-                    </span>
-                  </Link>
-                  <span>{idx !== track.artists.length - 1 ? ", " : ""}</span>
-                </>
-              );
-            })}
+      <div className="flex items-center grow">
+        <div className="w-3/6">
+          <div className="text-xl font-semibold">{track.name}</div>
+          <div className="flex text-md text-black/75">
+            {showArtist === true &&
+              track.artists.map((artist, idx) => {
+                return (
+                  <div className="mr-1 p-0" key={artist.id}>
+                    <Link
+                      className="flex flex-col"
+                      href={`/artist/${artist.id}`}
+                    >
+                      <span className="hover:underline hover:text-black">
+                        {artist.name}
+                      </span>
+                    </Link>
+                    <span>{idx !== track.artists.length - 1 ? ", " : ""}</span>
+                  </div>
+                );
+              })}
+          </div>
         </div>
+        {album && (
+          <div className="flex text-lg font-semibold hover:underline items-center mr-12 w-3/6 line-clamp-1">
+            <Link href={`/album/${album?.id}`}>{album?.name}</Link>
+          </div>
+        )}
       </div>
+
       <div className="flex items-center">
         {getFormattedTime(track.duration_ms / 1000)}
       </div>
@@ -93,10 +108,19 @@ export const Track = ({
   );
 };
 
-const TrackList = ({
+interface TrackListProps {
+  tracks: SpotifyApi.TrackObjectFull[];
+  showIdx: boolean;
+  showArtist: boolean;
+  showAlbum: boolean;
+}
+
+type Props = TrackListProps;
+const TrackList: React.FC<Props> = ({
   tracks,
-}: {
-  tracks: SpotifyApi.TrackObjectSimplified[];
+  showIdx,
+  showArtist,
+  showAlbum,
 }) => {
   return (
     <>
@@ -104,6 +128,7 @@ const TrackList = ({
         <div className="w-full flex px-4 py-2 mx-1">
           <div className="w-12 flex items-center text-lg">#</div>
           <div className="flex flex-col grow">TITLE</div>
+          {showAlbum && <div className="flex flex-col grow">ALBUM</div>}
           <div className="flex items-center">
             <FiClock />
           </div>
@@ -115,8 +140,10 @@ const TrackList = ({
           <Track
             track={track}
             key={track.uri}
-            showArtist={true}
-            showIdx={true}
+            showArtist={showArtist}
+            showIdx={showIdx}
+            album={showAlbum ? track?.album : undefined}
+            idx={idx}
           />
         ))}
       </div>

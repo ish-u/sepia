@@ -7,6 +7,7 @@ import {
   FiBookmark,
   FiArrowRight,
   FiArrowLeft,
+  FiList,
 } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -68,6 +69,7 @@ const NavBar = () => {
         <NavButton title="Home" icon={<FiHome />} link="/" />
         <NavButton title="Search" icon={<FiSearch />} link="/search" />
         <NavButton title="Your Library" icon={<FiBookmark />} link="/library" />
+        <NavButton title="Queue" icon={<FiList />} link="/queue" />
       </div>
       <div className="hover:scale-105">
         <Image
