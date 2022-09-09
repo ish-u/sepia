@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: ReactElement }) {
           getUserQueue();
           getCurrentUser();
         }
-      }, 1000);
+      }, 10000);
 
       () => {
         clearInterval(fetchData);
