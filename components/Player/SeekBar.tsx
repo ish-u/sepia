@@ -21,8 +21,10 @@ const SeekBar = ({ player }: { player: Spotify.Player }) => {
       const current = await player.getCurrentState();
       const songDuration: number =
         (current?.track_window.current_track.duration_ms as number) / 1000;
-      setPosition((current?.position as number) / 1000);
-      setDuration(songDuration);
+      if (songDuration) {
+        setPosition((current?.position as number) / 1000);
+        setDuration(songDuration);
+      }
     }, 100);
 
     return () => {
@@ -41,7 +43,7 @@ const SeekBar = ({ player }: { player: Spotify.Player }) => {
           onChange={(e) => {
             seek(parseInt(e.target.value));
           }}
-          type="range"
+          type="range"  
         />
       </div>
       <div>{getFormattedTime(duration)}</div>

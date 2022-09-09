@@ -8,11 +8,11 @@ import {
   FiMaximize2,
 } from "react-icons/fi";
 
-const QueueButton = React.forwardRef((props, ref) => (
-  <FiMenu className="h-6 w-6" />
-));
+// const QueueButton = React.forwardRef((props, ref) => (
+//   <FiMenu className="h-6 w-6" />
+// ));
 
-QueueButton.displayName = "QueueButton";
+// QueueButton.displayName = "Queue";
 
 const SideControls = ({ player }: { player: Spotify.Player }) => {
   const [volumne, setVolume] = useState(50);
@@ -26,8 +26,10 @@ const SideControls = ({ player }: { player: Spotify.Player }) => {
     <div className="flex items-center algin-middle justify-end">
       <div className="p-2 m-1">
         <Link href="/queue" passHref>
-          <QueueButton />
-          {/* <FiMenu className="h-6 w-6" /> */}
+          {/* <QueueButton /> */}
+          <div>
+            <FiMenu className="h-6 w-6" />
+          </div>
         </Link>
       </div>
       <div className="p-2 m-1">
