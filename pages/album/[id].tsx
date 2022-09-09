@@ -28,7 +28,7 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
   };
 
   return (
-    <div className="flex flex-col mx-36 mb-4">
+    <div className="flex flex-col mx-36 mb-4 pb-24">
       <Head>
         <title>
           {album.name} | {album.artists.map((artist) => artist.name)}
@@ -72,6 +72,18 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
         </div>
       </div>
       <TrackList tracks={album.tracks.items} />
+      <div className="py-2 px-12 ">
+        <div className="text-md font-light">
+          {new Intl.DateTimeFormat("en-US", {
+            dateStyle: "long",
+          }).format(new Date(album.release_date))}
+        </div>
+        {album.copyrights.map((copyright) => {
+          return (
+            <div className="text-xs font-extralight">{copyright.text}</div>
+          );
+        })}
+      </div>
     </div>
   );
 };

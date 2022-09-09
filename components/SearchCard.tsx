@@ -9,6 +9,9 @@ const Play = ({ show }: { show: boolean }) => {
       className={`${
         show ? "flex" : "hidden"
       } rounded-full absolute p-4 text-2xl bg-neutral-500 w-fit right-4 bottom-4 animate-appear`}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <FiPlay />
     </div>
@@ -27,7 +30,7 @@ export const SearchCard = ({
   subtitle: string;
   img: SpotifyApi.ImageObject;
   rounded: boolean;
-  type: "album" | "playlist" | "artist";
+  type: "album" | "playlist" | "artist" | "single" | "compilation";
   id: string;
 }) => {
   const [onHover, setOnHover] = useState(false);
