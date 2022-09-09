@@ -1,8 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
-import { getAlbum } from "../api/spotify/albums/[id]";
 import Image from "next/image";
-import TrackList, { Track } from "../../components/TrackList";
+import { Track } from "../../components/TrackList";
 import Head from "next/head";
 import { getArtist } from "../api/spotify/artists/[id]";
 import { getTopTracks } from "../api/spotify/artists/top-tracks/[id]";

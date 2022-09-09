@@ -72,7 +72,12 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
           </div>
         </div>
       </div>
-      <TrackList tracks={album.tracks.items} />
+      <TrackList
+        tracks={album.tracks.items as SpotifyApi.TrackObjectFull[]}
+        showAlbum={false}
+        showIdx={true}
+        showArtist={true}
+      />
       <div className="py-2 px-12 ">
         <div className="text-md font-light">
           {new Intl.DateTimeFormat("en-US", {
