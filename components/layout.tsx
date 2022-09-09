@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: ReactElement }) {
     if (state.user === undefined && status === "authenticated") {
       getCurrentUser();
     }
-  }, [status]);
+  }, [status, state]);
   return (
     <div className="bg-[#FFDCCC]">
       <NavBar />

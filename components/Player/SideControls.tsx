@@ -11,6 +11,9 @@ import {
 const QueueButton = React.forwardRef((props, ref) => (
   <FiMenu className="h-6 w-6" />
 ));
+
+QueueButton.displayName = "QueueButton";
+
 const SideControls = ({ player }: { player: Spotify.Player }) => {
   const [volumne, setVolume] = useState(50);
 

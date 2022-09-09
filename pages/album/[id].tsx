@@ -43,6 +43,7 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
             height={240}
             width={240}
             layout="fixed"
+            alt="Album Cover"
           />
         </div>
         <div className="grow py-8 flex flex-col justify-end">
@@ -53,7 +54,7 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
           <div className="text-md  m-2 flex font-bold">
             {album.artists.map((artist) => {
               return (
-                <div className="flex mr-1">
+                <div className="flex mr-1" key={artist.id}>
                   <div className="hover:underline">
                     <Link href={`/artist/${artist.id}`}>{artist.name}</Link>
                   </div>
@@ -80,7 +81,9 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
         </div>
         {album.copyrights.map((copyright) => {
           return (
-            <div className="text-xs font-extralight">{copyright.text}</div>
+            <div className="text-xs font-extralight" key={copyright.text}>
+              {copyright.text}
+            </div>
           );
         })}
       </div>

@@ -3,8 +3,19 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { AppProvider } from "../context/context";
 import Layout from "../components/layout";
+import type { NextComponentType } from "next"; //Import Component type
+import { Session } from "next-auth";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+type ExtendedAppProps = AppProps & {
+  pageProps: {
+    session: Session;
+  };
+};
+
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: ExtendedAppProps) {
   return (
     <SessionProvider session={session}>
       <AppProvider>
