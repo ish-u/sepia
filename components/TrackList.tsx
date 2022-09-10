@@ -38,7 +38,7 @@ export const Track = ({
 
   return (
     <div
-      className="w-full flex  px-4 py-2 m-1 hover:bg-slate-400/50 rounded-md hover:cursor-pointer"
+      className="w-full flex px-4 py-2 m-1 hover:bg-slate-400/50 rounded-md hover:cursor-pointer"
       onMouseEnter={() => {
         setShowPlay(true);
       }}
@@ -50,8 +50,8 @@ export const Track = ({
         onClick={() => {
           playSong(track.id);
         }}
-        className={`flex items-center text-lg w-12 ${
-          !showIdx && img && "mr-4"
+        className={`flex items-center text-lg w-16 ${
+          !showIdx && img && "mr-2"
         }`}
       >
         {showIdx && (showPlay ? <FiPlay /> : idx ? idx : track.track_number)}
@@ -72,9 +72,9 @@ export const Track = ({
           </div>
         )}
       </div>
-      <div className="flex items-center grow">
-        <div className="w-3/6">
-          <div className="text-xl font-semibold">{track.name}</div>
+      <div className="flex items-start grow">
+        <div className={`${album && "w-3/6"} line-clamp-1 mr-2`}>
+          <div className="text-xl font-semibold ">{track.name}</div>
           <div className="flex text-md text-black/75">
             {showArtist === true &&
               track.artists.map((artist, idx) => {
@@ -95,7 +95,7 @@ export const Track = ({
           </div>
         </div>
         {album && (
-          <div className="flex text-lg font-semibold hover:underline items-center mr-12 w-3/6 line-clamp-1">
+          <div className="flex text-lg font-semibold hover:underline mr-12 w-3/6 line-clamp-1">
             <Link href={`/album/${album?.id}`}>{album?.name}</Link>
           </div>
         )}
@@ -126,7 +126,7 @@ const TrackList: React.FC<Props> = ({
     <>
       <div className="px-8 text-black/75 font-thin mt-4">
         <div className="w-full flex px-4 py-2 mx-1">
-          <div className="w-12 flex items-center text-lg">#</div>
+          <div className="w-16 flex items-center text-lg">#</div>
           <div className="flex flex-col grow">TITLE</div>
           {showAlbum && <div className="flex flex-col grow">ALBUM</div>}
           <div className="flex items-center">
@@ -143,7 +143,7 @@ const TrackList: React.FC<Props> = ({
             showArtist={showArtist}
             showIdx={showIdx}
             album={showAlbum ? track?.album : undefined}
-            idx={idx}
+            idx={idx + 1}
           />
         ))}
       </div>

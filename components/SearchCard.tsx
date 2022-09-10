@@ -8,7 +8,7 @@ const Play = ({ show }: { show: boolean }) => {
     <div
       className={`${
         show ? "flex" : "hidden"
-      } rounded-full absolute p-4 text-2xl bg-neutral-500 w-fit right-4 bottom-4 animate-appear`}
+      } rounded-full absolute p-4 text-2xl bg-zinc-600 w-fit right-4 bottom-4 animate-appear hover:cursor-pointer`}
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -44,7 +44,7 @@ export const SearchCard = ({
         onMouseLeave={() => {
           setOnHover(false);
         }}
-        className="w-1/6 max-h-96 flex flex-col items-center m-2 mr-6 p-2  bg-slate-400 hover:bg-slate-500  duration-300 text-white rounded-xl overflow-hidden"
+        className="w-1/6 max-h-96 flex flex-col items-center m-2 mr-6 p-2  bg-slate-500 hover:bg-slate-600  duration-300 text-white rounded-xl overflow-hidden"
       >
         <div className="px-4 py-1 pt-4 relative">
           <Image
