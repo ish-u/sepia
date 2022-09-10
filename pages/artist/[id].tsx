@@ -81,7 +81,7 @@ const Artist = ({
           <div
             className={`mr-2 px-2 py-1 border ${
               albumType === "recent" ? "bg-slate-500" : "bg-slate-400"
-            } rounded-full hover:bg-slate-500`}
+            } rounded-full border-transparent hover:bg-slate-500`}
             onClick={() => {
               setAlbumType("recent");
             }}
@@ -92,7 +92,7 @@ const Artist = ({
           <div
             className={`mr-2 px-2 py-1 border ${
               albumType === "album" ? "bg-slate-500" : "bg-slate-400"
-            } rounded-full hover:bg-slate-500`}
+            } rounded-full border-transparent hover:bg-slate-500`}
             onClick={() => {
               setAlbumType("album");
             }}
@@ -102,7 +102,7 @@ const Artist = ({
           <div
             className={`mr-2 px-2 py-1 border ${
               albumType === "single" ? "bg-slate-500" : "bg-slate-400"
-            } rounded-full hover:bg-slate-500`}
+            } rounded-full border-transparent hover:bg-slate-500`}
             onClick={() => {
               setAlbumType("single");
             }}
@@ -114,16 +114,17 @@ const Artist = ({
           {albums.map((album) => {
             if (albumType === album.album_type || albumType === "recent") {
               return (
-                <Card
-                  key={album.id}
-                  id={album.id}
-                  img={album.images[0]}
-                  rounded={false}
-                  title={album.name}
-                  subtitle={album.album_type}
-                  type={album.album_type}
-                  tracks={album.total_tracks}
-                />
+                <div key={album.id} className="w-1/5">
+                  <Card
+                    id={album.id}
+                    img={album.images[0]}
+                    rounded={false}
+                    title={album.name}
+                    subtitle={album.album_type}
+                    type={album.album_type}
+                    tracks={album.total_tracks}
+                  />
+                </div>
               );
             }
           })}
@@ -147,7 +148,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       await getArtistAlbum(session?.accessToken || "", id as string)
     ).json()
   ).items;
-
   return {
     props: { artist, tracks, albums },
   };
