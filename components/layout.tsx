@@ -34,20 +34,27 @@ export default function Layout({ children }: { children: ReactElement }) {
 
   useEffect(() => {
     if (state.user === undefined && status === "authenticated") {
+      getCurrentUser();
+      getUserQueue();
       const fetchData = setInterval(() => {
         if (session?.accessToken) {
           getUserQueue();
           getCurrentUser();
         }
-      }, 10000);
-
+      }, 600000);
       () => {
         clearInterval(fetchData);
       };
     }
   }, [status]);
+
+  useEffect(() => {
+    console.log("RENDER");
+  }, [state.queue]);
+
   return (
-    <div className="bg-[#FFDCCC]">
+    <div className="w-full min-h-full relative ">
+      <div className="fixed top-0 left-0 h-full w-full -z-50  bg-gradient-to-b from-[#FFDCCC] to-slate-400"></div>
       {<NavBar />}
       {children}
       {<Player />}
