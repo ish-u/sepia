@@ -87,26 +87,28 @@ const Player = () => {
   }, [status]);
 
   return (
-    <div className="fixed w-full bottom-0 left-0 bg-slate-500 text-white">
-      <div className="m-2">
-        {state.player !== undefined && state.device_id !== "" && (
-          <div className="flex justify-end  items-center">
-            <div className="w-3/12">
-              {track !== undefined && <SongInformation track={track} />}
-            </div>
-            <div className="flex flex-grow flex-col justify-center items-center align-middle">
-              <PlayerControls />
-              <div className="flex flex-col justify-center w-5/6">
-                <SeekBar player={state.player} />
+    <>
+      {state.player !== undefined && state.device_id !== "" && (
+        <div className="fixed w-full bottom-0 left-0 bg-slate-700 text-white">
+          <div className="m-2">
+            <div className="flex justify-end  items-center">
+              <div className="w-3/12">
+                {track !== undefined && <SongInformation track={track} />}
+              </div>
+              <div className="flex flex-grow flex-col justify-center items-center align-middle">
+                <PlayerControls />
+                <div className="flex flex-col justify-center w-5/6">
+                  <SeekBar player={state.player} />
+                </div>
+              </div>
+              <div className="w-3/12">
+                <SideControls player={state.player} />
               </div>
             </div>
-            <div className="w-3/12">
-              <SideControls player={state.player} />
-            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
