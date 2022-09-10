@@ -19,3 +19,68 @@ export const getPlaylist = async (id: string, access_token: string) => {
   const data = await res.json();
   return data;
 };
+
+export const getRecentPlayed = async (access_token: string) => {
+  const res = await fetch(`${API_ENDPOINT}/me/player/recently-played`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "content-type": "application/json",
+    },
+  });
+  console.log(res.status);
+  const data = await res.json();
+  return data;
+};
+
+export const getUserTopItems = async (
+  access_token: string,
+  type: "artists" | "tracks"
+) => {
+  const res = await fetch(`${API_ENDPOINT}/me/top/${type}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "content-type": "application/json",
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
+export const getUserLikedTracks = async (
+  access_token: string,
+  offest: number
+) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/me/tracks?limit=50&offset=${offest}`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "content-type": "application/json",
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const getNewReleases = async (access_token: string) => {
+  const res = await fetch(`${API_ENDPOINT}/browse/new-releases`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "content-type": "application/json",
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
+export const getFeaturedPlaylists = async (access_token: string) => {
+  const res = await fetch(`${API_ENDPOINT}/browse/featured-playlists`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "content-type": "application/json",
+    },
+  });
+  const data = await res.json();
+  return data;
+};
