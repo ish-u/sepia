@@ -33,13 +33,13 @@ export const Card = ({
   rounded: boolean;
   type: "album" | "playlist" | "artist" | "single" | "compilation";
   id: string;
-  tracks: number;
+  tracks?: number;
 }) => {
   const [onHover, setOnHover] = useState(false);
 
   return (
     <div>
-      <Link href={`/album/${id}`}>
+      <Link href={`/${type === ("album" || "single") ? "album" : type}/${id}`}>
         <div
           onMouseEnter={() => {
             setOnHover(true);
@@ -47,7 +47,7 @@ export const Card = ({
           onMouseLeave={() => {
             setOnHover(false);
           }}
-          className="max-h-96 flex flex-col items-center m-2 mr-6 p-2  bg-slate-400 hover:bg-slate-500  duration-300 text-white rounded-xl overflow-hidden"
+          className="max-h-96 flex flex-col items-center m-2 mr-6 p-2  bg-slate-500 hover:bg-slate-600  duration-300 text-white rounded-xl overflow-hidden"
         >
           <div className="px-4 py-1 pt-4 relative">
             <Image
