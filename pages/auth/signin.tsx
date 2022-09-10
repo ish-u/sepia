@@ -1,7 +1,7 @@
 import { getProviders, signIn } from "next-auth/react";
 import { InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-
+import SPotifyIcon from "../../public/Spotify_Icon_RGB_Green.png";
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -10,24 +10,25 @@ export default function SignIn({
       {providers
         ? Object.values(providers).map((provider) => (
             <div
-              className="w-screen h-screen flex justify-center items-center"
+              className="w-full h-full flex flex-col justify-center items-center"
               key={provider.name}
             >
+              <div className="text-9xl p-32 font-semibold">sepia</div>
               <button
-                className="text-white drop-shadow-xl text-lg flex flex-row items-center justify-center align-middle px-4 py-2 my-2 bg-black rounded-full"
+                className="text-white drop-shadow-xl text-2xl flex flex-row items-center justify-center align-middle p-4 my-2 hover:scale-105 duration-150 ease-in-out bg-black rounded-full"
                 onClick={() =>
                   signIn(provider.id, {
-                    callbackUrl: "http://localhost:3000/dashboard",
+                    callbackUrl: "http://localhost:3000",
                   })
                 }
               >
                 <Image
-                  height="32px"
-                  width="32px"
-                  src="/Spotify_Icon_RGB_Green.png"
+                  height="44px"
+                  width="44px"
+                  src={SPotifyIcon}
                   alt="Spotify Logo"
                 ></Image>
-                <span className="font-thin ml-2">
+                <span className="font-semibold ml-4 mr-2">
                   Sign in with {provider.name}
                 </span>
               </button>
