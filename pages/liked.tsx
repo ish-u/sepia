@@ -17,15 +17,25 @@ const Liked = () => {
         0
       );
       res.items.map((item) => {
-        setTracks((prev) => [...prev, item.track]);
+        setTracks((prev) => {
+          if (prev.findIndex((x) => x.id === item.track.id) === -1) {
+            return [...prev, item.track];
+          }
+          return prev;
+        });
       });
       setTotal(res.total);
-      for (var i = res.limit; i <= 100; i = i + res.limit) {
+      for (var i = res.limit; i <= res.total; i = i + res.limit) {
         setTimeout(() => {}, 1000);
         const res1: SpotifyApi.UsersSavedTracksResponse =
           await getUserLikedTracks(session?.accessToken || "", i);
         res1.items.map((item) => {
-          setTracks((prev) => [...prev, item.track]);
+          setTracks((prev) => {
+            if (prev.findIndex((x) => x.id === item.track.id) === -1) {
+              return [...prev, item.track];
+            }
+            return prev;
+          });
         });
       }
     }
