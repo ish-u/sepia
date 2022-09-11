@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { getUserLikedTracks } from "../library/spotify";
-import TrackList, { Track } from "../components/TrackList";
+import TrackList from "../components/TrackList";
 import { FiHeart } from "react-icons/fi";
-import { time } from "console";
 
 const Liked = () => {
   const { data: session } = useSession();
