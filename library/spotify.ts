@@ -63,6 +63,40 @@ export const getUserLikedTracks = async (
   return data;
 };
 
+export const getUserSavedAlbums = async (
+  access_token: string,
+  offest: number
+) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/me/albums?limit=50&offset=${offest}`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "content-type": "application/json",
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const getUserSavedPlaylists = async (
+  access_token: string,
+  offest: number
+) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/me/playlists?limit=50&offset=${offest}`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "content-type": "application/json",
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
 export const getNewReleases = async (access_token: string) => {
   const res = await fetch(`${API_ENDPOINT}/browse/new-releases`, {
     headers: {
