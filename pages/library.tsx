@@ -91,7 +91,7 @@ const Library = () => {
         {toShow === "albums" &&
           albums &&
           albums.map((album) => (
-            <div className="m-4">
+            <div className="m-4" key={album.id}>
               <Card
                 id={album.id}
                 img={album.images[0]}
@@ -99,14 +99,13 @@ const Library = () => {
                 title={album.name}
                 subtitle={album.type}
                 type={album.type}
-                key={album.id}
               />
             </div>
           ))}
         {toShow === "playlists" &&
           playlists &&
           playlists.map((playlist) => (
-            <div className="m-4">
+            <div className="m-4" key={playlist.id}>
               <Card
                 id={playlist.id}
                 img={playlist.images[0]}
@@ -114,7 +113,6 @@ const Library = () => {
                 title={playlist.name}
                 subtitle={`By ${playlist.owner.display_name}`}
                 type="playlist"
-                key={playlist.id}
               />
             </div>
           ))}
