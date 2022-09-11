@@ -99,6 +99,7 @@ const Library = () => {
                 title={album.name}
                 subtitle={album.type}
                 type={album.type}
+                uri={album.uri}
               />
             </div>
           ))}
@@ -113,6 +114,7 @@ const Library = () => {
                 title={playlist.name}
                 subtitle={`By ${playlist.owner.display_name}`}
                 type="playlist"
+                uri={playlist.uri}
               />
             </div>
           ))}
