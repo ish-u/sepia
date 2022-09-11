@@ -121,11 +121,4 @@ const Library = () => {
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-
-  return {
-    props: {},
-  };
-}
 export default Library;
