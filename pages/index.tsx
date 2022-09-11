@@ -12,6 +12,7 @@ import {
 
 import { Track } from "../components/TrackList";
 import Card from "../components/Card";
+import Slider from "../components/Slider";
 
 const Home = ({
   recently,
@@ -28,68 +29,29 @@ const Home = ({
 }) => {
   const { state, dispatch } = useContext(AppContext);
   return (
-    <div className="flex flex-col m-4 mx-32 mb-32">
+    <div className="m-4 mx-32 mb-32">
       <div className="text-4xl mb-8">
         welcome
         <span className="font-bold mx-2">{state.user?.display_name}</span>
       </div>
 
-      <div>
-        <div className="flex flex-col">
-          <div className="text-3xl font-bold my-4">Your Top Artists</div>
-          <div className="flex justify-start">
-            {top_artists.items.slice(0, 5).map((artist) => (
-              <div key={artist.id} className="mr-2 w-1/5">
-                <Card
-                  id={artist.id}
-                  img={artist.images[0]}
-                  rounded={true}
-                  title={artist.name}
-                  subtitle={artist.type}
-                  type="artist"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+      <Slider
+        title="Your Top Artists"
+        type="artist"
+        artists={top_artists.items}
+      />
 
-        <div className="flex flex-col">
-          <div className="text-3xl font-bold my-4">New Releases</div>
-          <div className="flex justify-start">
-            {releases.albums.items.slice(0, 5).map((album) => (
-              <div key={album.id} className="mr-2 w-1/5">
-                <Card
-                  id={album.id}
-                  img={album.images[0]}
-                  rounded={false}
-                  title={album.name}
-                  subtitle={album.type}
-                  type="album"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+      <Slider
+        title="New Releases"
+        type="album"
+        albums={releases.albums.items as SpotifyApi.AlbumObjectFull[]}
+      />
 
-        <div className="flex flex-col">
-          <div className="text-3xl font-bold my-4">{featured.message}</div>
-          <div className="flex justify-start">
-            {featured.playlists.items.slice(0, 5).map((playlist) => (
-              <div key={playlist.id} className="mr-2 w-1/5">
-                <Card
-                  id={playlist.id}
-                  img={playlist.images[0]}
-                  rounded={false}
-                  title={playlist.name}
-                  subtitle={playlist.type}
-                  type="playlist"
-                  key={playlist.id}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Slider
+        title={featured.message || ""}
+        type="playlist"
+        playlists={featured.playlists.items as SpotifyApi.PlaylistObjectFull[]}
+      />
 
       <div className="flex w-full items-center">
         <div className="w-3/6 my-8">
