@@ -123,6 +123,7 @@ const Artist = ({
                     subtitle={album.album_type}
                     type={album.album_type}
                     tracks={album.total_tracks}
+                    uri={album.uri}
                   />
                 </div>
               );
