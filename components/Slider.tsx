@@ -28,6 +28,7 @@ const Slider = ({
                 title={album.name}
                 subtitle={album.type}
                 type={type}
+                uri={album.uri}
               />
             </div>
           ))}
@@ -43,6 +44,7 @@ const Slider = ({
                 title={playlist.name}
                 subtitle={playlist.type}
                 type={type}
+                uri={playlist.uri}
               />
             </div>
           ))}
@@ -58,6 +60,7 @@ const Slider = ({
                 title={artist.name}
                 subtitle={artist.type}
                 type="artist"
+                uri={artist.uri}
               />
             </div>
           ))}
