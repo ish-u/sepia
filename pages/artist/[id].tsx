@@ -110,11 +110,11 @@ const Artist = ({
             Singles & EP
           </div>
         </div>
-        <div className="flex justify-start overflow-hidden">
+        <div className="flex justify-start my-4 overflow-x-scroll">
           {albums.map((album) => {
             if (albumType === album.album_type || albumType === "recent") {
               return (
-                <div key={album.id} className="w-1/5">
+                <div key={album.id} className="mr-4 my-2 mb-4">
                   <Card
                     id={album.id}
                     img={album.images[0]}
