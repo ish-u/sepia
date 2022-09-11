@@ -118,3 +118,26 @@ export const getFeaturedPlaylists = async (access_token: string) => {
   const data = await res.json();
   return data;
 };
+
+export const playAlbumPlaylistArtist = async (
+  context_uri: string,
+  access_token: string,
+  device_id: string
+) => {
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      context_uri: context_uri,
+    } as any),
+  };
+  const res = await fetch(
+    `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+    options
+  );
+  return res.status;
+};
