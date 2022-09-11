@@ -3,6 +3,7 @@ import React from "react";
 // import SearchBar from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import SearchCard from "../components/SearchCard";
+import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
 
 const Search = () => {
@@ -44,7 +45,7 @@ const Search = () => {
 
       {data && (
         <>
-          <div className="tracks mb-4">
+          <div className="tracks mb-4 w-5/6">
             <div className="text-2xl font-bold mx-2 my-1">Tracks</div>
             {data?.tracks?.items.map((track) => (
               <Track
@@ -56,62 +57,24 @@ const Search = () => {
               />
             ))}
           </div>
-          <div className="albums mb-4">
-            <div className="text-2xl font-bold mx-2 my-1">Albums</div>
-            <div className="flex justify-start">
-              {data?.albums?.items.map((album) => {
-                return (
-                  <SearchCard
-                    img={album.images[0]}
-                    rounded={false}
-                    title={album.name}
-                    subtitle={album.artists
-                      .map((artist) => artist.name)
-                      .join(" ")}
-                    type="album"
-                    id={album.id}
-                    key={album.id}
-                  />
-                );
-              })}
-            </div>
-          </div>
-          <div className="artists mb-4">
-            <div className="text-2xl font-bold mx-2 my-1">Artists</div>
-            <div className="flex justify-start">
-              {data?.artists?.items.map((artist) => {
-                return (
-                  <SearchCard
-                    img={artist.images[0]}
-                    rounded={true}
-                    title={artist.name}
-                    subtitle="Artist"
-                    type="artist"
-                    id={artist.id}
-                    key={artist.id}
-                  />
-                );
-              })}
-            </div>
-          </div>
-          <div className="playlist mb-4">
-            <div className="text-2xl font-bold mx-2 my-1">Playlists</div>
-            <div className="flex justify-start">
-              {data?.playlists?.items.map((playlist) => {
-                return (
-                  <SearchCard
-                    img={playlist.images[0]}
-                    rounded={false}
-                    title={playlist.name}
-                    subtitle={"By " + playlist.owner.display_name}
-                    type="playlist"
-                    id={playlist.id}
-                    key={playlist.id}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <Slider
+            title="Albums"
+            albums={data?.albums?.items as SpotifyApi.AlbumObjectFull[]}
+            type="album"
+          />
+
+          <Slider
+            title="Artists"
+            artists={data?.artists?.items as SpotifyApi.ArtistObjectFull[]}
+            type="artist"
+          />
+          <Slider
+            title="Playlists"
+            playlists={
+              data?.playlists?.items as SpotifyApi.PlaylistObjectFull[]
+            }
+            type="playlist"
+          />
         </>
       )}
     </div>
