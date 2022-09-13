@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiPlay } from "react-icons/fi";
 import { playAlbumPlaylistArtist } from "../library/spotify";
 import { useSession } from "next-auth/react";
 import { AppContext } from "../context/context";
+import { MdPlayArrow } from "react-icons/md";
 
 const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
   const { data: session } = useSession();
@@ -13,7 +13,7 @@ const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
     <div
       className={`${
         show ? "flex" : "hidden"
-      } rounded-full absolute p-4 text-2xl bg-neutral-500 w-fit right-4 bottom-4 animate-appear`}
+      } rounded-full absolute p-4 text-3xl bg-neutral-500 w-fit right-4 bottom-4 animate-appear`}
       onClick={async (e) => {
         e.stopPropagation();
         if (session?.accessToken && uri) {
@@ -25,7 +25,7 @@ const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
         }
       }}
     >
-      <FiPlay />
+      <MdPlayArrow />
     </div>
   );
 };
@@ -74,6 +74,7 @@ export const Card = ({
               layout="fixed"
               objectFit="contain"
               width={"144px"}
+              alt={type + " art"}
             />
             <Play show={onHover} uri={uri} />
           </div>

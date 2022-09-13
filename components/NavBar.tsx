@@ -1,14 +1,12 @@
-import React from "react";
 import Image from "next/image";
 import {
-  FiHome,
-  FiSearch,
-  FiBookmark,
-  FiArrowRight,
-  FiArrowLeft,
-  FiList,
-  FiHeart,
-} from "react-icons/fi";
+  MdArrowBack,
+  MdFavorite,
+  MdHomeFilled,
+  MdLibraryMusic,
+  MdQueueMusic,
+  MdSearch,
+} from "react-icons/md";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -26,7 +24,7 @@ const BackButton = () => {
                   flex items-center text-lg hover:cursor-pointer
                   duration-150 ease-in-out hover:bg-slate-700 font-semibold`}
     >
-      <FiArrowLeft />
+      <MdArrowBack />
     </div>
   );
 };
@@ -54,7 +52,7 @@ const NavButton = ({
                     focus:scale-100
                     `}
       >
-        <div className="px-1">{icon}</div>
+        <div className="px-1 text-xl">{icon}</div>
         <div className="px-1">{title}</div>
       </div>
     </Link>
@@ -69,15 +67,15 @@ const NavBar = () => {
         <div className="flex items-center w-full h-24 justify-around backdrop-blur-lg">
           <div className="flex items-center">
             <BackButton />
-            <NavButton title="Home" icon={<FiHome />} link="/" />
-            <NavButton title="Search" icon={<FiSearch />} link="/search" />
+            <NavButton title="Home" icon={<MdHomeFilled />} link="/" />
+            <NavButton title="Search" icon={<MdSearch />} link="/search" />
             <NavButton
               title="Your Library"
-              icon={<FiBookmark />}
+              icon={<MdLibraryMusic />}
               link="/library"
             />
-            <NavButton title="Liked" icon={<FiHeart />} link="/liked" />
-            <NavButton title="Queue" icon={<FiList />} link="/queue" />
+            <NavButton title="Liked" icon={<MdFavorite />} link="/liked" />
+            <NavButton title="Queue" icon={<MdQueueMusic />} link="/queue" />
           </div>
           <div className="hover:scale-105">
             <Image
@@ -88,6 +86,7 @@ const NavBar = () => {
               }
               height={48}
               width={48}
+              alt="User Profile"
             ></Image>
           </div>
         </div>

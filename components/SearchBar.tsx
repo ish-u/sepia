@@ -26,17 +26,16 @@ const SearchBar = () => {
     });
   };
 
-  const search = async () => {
-    const res = await fetch(`/api/spotify/search?q=${query}`);
-    const data = (await res.json()).data;
-    if (data?.tracks?.items) {
-      setTracks(data?.tracks?.items);
-    } else {
-      setTracks([]);
-    }
-  };
-
   useEffect(() => {
+    const search = async () => {
+      const res = await fetch(`/api/spotify/search?q=${query}`);
+      const data = (await res.json()).data;
+      if (data?.tracks?.items) {
+        setTracks(data?.tracks?.items);
+      } else {
+        setTracks([]);
+      }
+    };
     search();
     if (query === "") {
       setTracks([]);

@@ -63,6 +63,7 @@ export const Track = ({
               width={42}
               objectFit="contain"
               layout="fixed"
+              alt="Track Image"
             />
             {showPlay && (
               <div className="flex justify-center items-center absolute top-0 left-0 text-2xl bg-black/50 w-[42px] h-[42px] text-white">
