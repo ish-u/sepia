@@ -8,6 +8,18 @@ import {
   FiRepeat,
   FiShuffle,
 } from "react-icons/fi";
+
+import {
+  MdPlayCircle,
+  MdPauseCircle,
+  MdRepeatOn,
+  MdRepeat,
+  MdShuffle,
+  MdShuffleOn,
+  MdRepeatOneOn,
+  MdSkipNext,
+  MdSkipPrevious,
+} from "react-icons/md";
 import { SpotifyRepeatState } from "../../pages/api/spotify/player/repeat";
 const PlayerControls = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -60,23 +72,19 @@ const PlayerControls = () => {
   useEffect(() => {
     getShuffleState();
     getRepeatState();
-  }, []);
+  });
 
   return (
     <div className="flex justify-center align-middle items-center m-1">
       <div
         className="p-2"
         onClick={async () => {
-          await toggleRepeat();
+          await toggleShuffle();
+          setShuffle(!shuffle);
         }}
       >
-        {repeat === SpotifyRepeatState.off && <FiRepeat className="w-4 h-4" />}
-        {repeat === SpotifyRepeatState.track && (
-          <FiRepeat className="w-4 h-4 bg-green-400" />
-        )}
-        {repeat === SpotifyRepeatState.context && (
-          <FiRepeat className="w-4 h-4 bg-red-400" />
-        )}
+        {shuffle === true && <MdShuffleOn className="w-6 h-6" />}
+        {shuffle === false && <MdShuffle className="w-6 h-6" />}
       </div>
       <div
         className="p-2"
@@ -84,18 +92,18 @@ const PlayerControls = () => {
           await state.player?.previousTrack();
         }}
       >
-        <FiSkipBack className="h-6 w-6" />
+        <MdSkipPrevious className="h-6 w-6" />
       </div>
       <div
-        className="p-2 hover:cursor-pointer"
+        className="hover:cursor-pointer"
         onClick={async () => {
           await state.player?.togglePlay();
         }}
       >
         {!state.active ? (
-          <FiPlay className="h-8 w-8" />
+          <MdPlayCircle className="h-10 w-10" />
         ) : (
-          <FiPause className="h-8 w-8" />
+          <MdPauseCircle className="h-10 w-10" />
         )}
       </div>
 
@@ -105,17 +113,22 @@ const PlayerControls = () => {
           await state.player?.nextTrack();
         }}
       >
-        <FiSkipForward className="h-6 w-6" />
+        <MdSkipNext className="h-6 w-6" />
       </div>
+
       <div
         className="p-2"
         onClick={async () => {
-          await toggleShuffle();
-          setShuffle(!shuffle);
+          await toggleRepeat();
         }}
       >
-        {shuffle === true && <FiShuffle className="w-4 h-4 text-white" />}
-        {shuffle === false && <FiShuffle className="w-4 h-4" />}
+        {repeat === SpotifyRepeatState.off && <MdRepeat className="w-6 h-6" />}
+        {repeat === SpotifyRepeatState.track && (
+          <MdRepeatOneOn className="w-6 h-6" />
+        )}
+        {repeat === SpotifyRepeatState.context && (
+          <MdRepeatOn className="w-6 h-6" />
+        )}
       </div>
     </div>
   );
