@@ -1,13 +1,29 @@
-import { useSession } from "next-auth/react";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Track } from "../components/TrackList";
 import { AppContext } from "../context/context";
-import { getUserQueue } from "../library/spotify";
-const API_ENDPOINT: string = "https://api.spotify.com/v1";
+import { ActionType } from "../context/actions";
 
 const Queue = () => {
-  const { data: session } = useSession();
   const { state, dispatch } = useContext(AppContext);
+
+  useEffect(() => {
+    const getUserQueue = async () => {
+      const res = await fetch("/api/spotify/player/queue");
+      const userQueue = (await res.json()).data;
+      if (res.status === 200) {
+        dispatch({
+          type: ActionType.UpdateQueue,
+          payload: {
+            queue: userQueue,
+          },
+        });
+      }
+    };
+
+    getUserQueue();
+  }, [state.track, dispatch]);
+
+  useEffect(() => {}, [state.track]);
 
   return (
     <div className="mx-36 p-8">

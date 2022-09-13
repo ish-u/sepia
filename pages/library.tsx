@@ -12,55 +12,51 @@ const Library = () => {
   >([]);
   const [toShow, setToShow] = useState<"albums" | "playlists">("albums");
 
-  const getAlbums = async () => {
-    if (session?.accessToken) {
-      var total = 50;
-      var i = 0;
-      do {
-        var res: SpotifyApi.UsersSavedAlbumsResponse = await getUserSavedAlbums(
-          session?.accessToken,
-          i
-        );
-        total = res.total;
-        res.items.map((album) => {
-          setAlbums((prev) => {
-            if (prev.findIndex((x) => x.id === album.album.id) === -1) {
-              return [...prev, album.album];
-            }
-            return prev;
-          });
-        });
-        i += 50;
-      } while (i < total);
-    }
-  };
-
-  const getPlaylists = async () => {
-    if (session?.accessToken) {
-      var total = 50;
-      var i = 0;
-      do {
-        var res: SpotifyApi.ListOfUsersPlaylistsResponse =
-          await getUserSavedPlaylists(session?.accessToken, i);
-        total = res.total;
-        res.items.map((playlist) => {
-          setPlaylists((prev) => {
-            if (prev.findIndex((x) => x.id === playlist.id) === -1) {
-              return [...prev, playlist];
-            }
-            return prev;
-          });
-        });
-        i += 50;
-      } while (i < total);
-    }
-  };
-
   useEffect(() => {
-    if (session?.accessToken) {
-      getAlbums();
-      getPlaylists();
-    }
+    const getAlbums = async () => {
+      if (session?.accessToken) {
+        var total = 50;
+        var i = 0;
+        do {
+          var res: SpotifyApi.UsersSavedAlbumsResponse =
+            await getUserSavedAlbums(session?.accessToken, i);
+          total = res.total;
+          res.items.map((album) => {
+            setAlbums((prev) => {
+              if (prev.findIndex((x) => x.id === album.album.id) === -1) {
+                return [...prev, album.album];
+              }
+              return prev;
+            });
+          });
+          i += 50;
+        } while (i < total);
+      }
+    };
+
+    const getPlaylists = async () => {
+      if (session?.accessToken) {
+        var total = 50;
+        var i = 0;
+        do {
+          var res: SpotifyApi.ListOfUsersPlaylistsResponse =
+            await getUserSavedPlaylists(session?.accessToken, i);
+          total = res.total;
+          res.items.map((playlist) => {
+            setPlaylists((prev) => {
+              if (prev.findIndex((x) => x.id === playlist.id) === -1) {
+                return [...prev, playlist];
+              }
+              return prev;
+            });
+          });
+          i += 50;
+        } while (i < total);
+      }
+    };
+
+    getAlbums();
+    getPlaylists();
   }, [session?.accessToken]);
 
   return (

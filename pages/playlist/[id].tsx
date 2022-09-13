@@ -24,6 +24,7 @@ const Playlist = ({
             height={240}
             width={240}
             src={playlist.images[0].url}
+            alt="Playlist Art"
           ></Image>
         </div>
         <div className="flex flex-col justify-end p-4">

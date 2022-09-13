@@ -39,8 +39,9 @@ const Artist = ({
             src={artist.images[0].url}
             height={240 || artist.images[0].height}
             width={240 || artist.images[0].width}
-            layout="intrinsic"
+            layout="fixed"
             objectFit="cover"
+            alt="Artist Picture"
           ></Image>
         </div>
 

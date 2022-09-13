@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React from "react";
-// import SearchBar from "../components/SearchBar";
 import { useState, useEffect } from "react";
-import SearchCard from "../components/SearchCard";
 import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
 
@@ -10,19 +8,12 @@ const Search = () => {
   const [query, setQuery] = useState("");
   const [data, setData] = useState<SpotifyApi.SearchResponse | null>(null);
 
-  const search = async () => {
-    const res = await fetch(`/api/spotify/search?q=${query}`);
-    const jsonData: SpotifyApi.SearchResponse = (await res.json()).data;
-    console.log(jsonData);
-    setData(jsonData);
-    // if (data?.tracks?.items) {
-    //   setTracks(data?.tracks?.items);
-    // } else {
-    //   setTracks([]);
-    // }
-  };
-
   useEffect(() => {
+    const search = async () => {
+      const res = await fetch(`/api/spotify/search?q=${query}`);
+      const jsonData: SpotifyApi.SearchResponse = (await res.json()).data;
+      setData(jsonData);
+    };
     search();
     if (query === "") {
       setData(null);
