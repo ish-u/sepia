@@ -12,4 +12,5 @@ export interface AppState {
   player: Spotify.Player | undefined;
   user: SpotifyUser | undefined;
   queue: queue | undefined;
+  track: Spotify.Track | undefined;
 }

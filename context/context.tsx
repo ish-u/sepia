@@ -9,6 +9,7 @@ const InitialState: AppState = {
   id: "",
   user: undefined,
   queue: undefined,
+  track: undefined,
 };
 
 export const AppContext = createContext<{

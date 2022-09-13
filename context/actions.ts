@@ -7,6 +7,7 @@ export enum ActionType {
   Player,
   SetUser,
   UpdateQueue,
+  SetTrack,
 }
 
 export interface Toggle {
@@ -39,10 +40,16 @@ export interface UpdateQueue {
   payload: { queue: queue };
 }
 
+export interface SetTrack {
+  type: ActionType.SetTrack;
+  payload: { track: Spotify.Track };
+}
+
 export type AppActions =
   | Toggle
   | Change
   | Device
   | Player
   | SetUser
-  | UpdateQueue;
+  | UpdateQueue
+  | SetTrack;

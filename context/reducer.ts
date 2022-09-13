@@ -16,6 +16,8 @@ export const AppReducer = (state: AppState, action: AppActions): AppState => {
       return { ...state, user: action.payload.user };
     case ActionType.UpdateQueue:
       return { ...state, queue: action.payload.queue };
+    case ActionType.SetTrack:
+      return { ...state, track: action.payload.track };
 
     default:
       return state;
