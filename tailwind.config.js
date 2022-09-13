@@ -13,7 +13,7 @@ module.exports = {
         },
       },
       animation: {
-        appear: "appear 300ms",
+        appear: "appear 150ms",
       },
     },
   },
