@@ -144,6 +144,66 @@ export const getPlaylist = async (id: string, access_token: string) => {
   return data;
 };
 
+export const isPlaylistLiked = async (
+  access_token: string,
+  user_id: string,
+  playlist_id: string
+) => {
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/playlists/${playlist_id}/followers/contains?ids=${user_id}`,
+    options
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const likePlaylist = async (
+  access_token: string,
+  playlist_id: string
+) => {
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/playlists/${playlist_id}/followers`,
+    options
+  );
+  return res.status;
+};
+
+export const unlikePlaylist = async (
+  access_token: string,
+  playlist_id: string
+) => {
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/playlists/${playlist_id}/followers`,
+
+    options
+  );
+  return res.status;
+};
+
 // ===================================================================================
 
 // ALBUM
@@ -172,7 +232,7 @@ export const getArtistAlbum = async (access_token: string, id: string) => {
   return data;
 };
 
-export const isLiked = async (access_token: string, id: string) => {
+export const isAlbumLiked = async (access_token: string, id: string) => {
   const options = {
     method: "GET",
     headers: {
