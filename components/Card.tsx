@@ -6,14 +6,14 @@ import { useSession } from "next-auth/react";
 import { AppContext } from "../context/context";
 import { MdPlayArrow } from "react-icons/md";
 
-const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
+export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
   const { data: session } = useSession();
-  const { state, dispatch } = useContext(AppContext);
+  const { state } = useContext(AppContext);
   return (
     <div
       className={`${
         show ? "flex" : "hidden"
-      } rounded-full absolute p-4 text-3xl bg-neutral-500 w-fit right-4 bottom-4 animate-appear`}
+      } rounded-full  p-4 text-3xl bg-neutral-500 hover:cursor-pointer w-fit animate-appear`}
       onClick={async (e) => {
         e.stopPropagation();
         if (session?.accessToken && uri) {
@@ -76,7 +76,9 @@ export const Card = ({
               width={"144px"}
               alt={type + " art"}
             />
-            <Play show={onHover} uri={uri} />
+            <div className="absolute right-4 bottom-4">
+              <Play show={onHover} uri={uri} />
+            </div>
           </div>
           <div className="flex flex-col w-full px-4 py-2">
             <div className="text-lg text-ellipsis overflow-hidden line-clamp-1">
