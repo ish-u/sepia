@@ -9,6 +9,7 @@ declare module "next-auth" {
     accessToken: string;
     refreshToken: string;
     expires: number;
+    userID: string;
   }
 }
 
@@ -18,5 +19,6 @@ declare module "next-auth/jwt" {
     accessToken?: string;
     expiresAt?: number;
     refreshToken?: string;
+    userID: string;
   }
 }
