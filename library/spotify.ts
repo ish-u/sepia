@@ -10,16 +10,6 @@ export const getUserQueue = async (access_token: string) => {
   return res;
 };
 
-export const getPlaylist = async (id: string, access_token: string) => {
-  const res = await fetch(`${API_ENDPOINT}/playlists/${id}`, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-  const data = await res.json();
-  return data;
-};
-
 export const getRecentPlayed = async (access_token: string) => {
   const res = await fetch(`${API_ENDPOINT}/me/player/recently-played`, {
     headers: {
@@ -142,7 +132,33 @@ export const playAlbumPlaylistArtist = async (
   return res.status;
 };
 
+// PLAYLIST
+// ===================================================================================
+export const getPlaylist = async (id: string, access_token: string) => {
+  const res = await fetch(`${API_ENDPOINT}/playlists/${id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
+// ===================================================================================
+
 // ALBUM
+// ===================================================================================
+export const getAlbum = async (access_token: string, id: string) => {
+  const res = await fetch(`${API_ENDPOINT}/albums/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
 export const getArtistAlbum = async (access_token: string, id: string) => {
   const res = await fetch(
     `${API_ENDPOINT}/artists/${id}/albums?limit=50&include_groups=album,single`,
@@ -155,6 +171,50 @@ export const getArtistAlbum = async (access_token: string, id: string) => {
   const data = await res.json();
   return data;
 };
+
+export const isLiked = async (access_token: string, id: string) => {
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/me/albums/contains?ids=${id}`,
+    options
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const likeAlbum = async (access_token: string, id: string) => {
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(`${API_ENDPOINT}/me/albums?ids=${id}`, options);
+  return res.status;
+};
+
+export const unlikeAlbum = async (access_token: string, id: string) => {
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(`${API_ENDPOINT}/me/albums?ids=${id}`, options);
+  return res.status;
+};
+// ===================================================================================
 
 // TRACK
 export const getTopTracks = async (access_token: string, id: string) => {
@@ -170,7 +230,8 @@ export const getTopTracks = async (access_token: string, id: string) => {
   return data;
 };
 
-// FOLLOW, UNFOLLOW, CHECK FOLLOWING ARTIST
+// ARTISTS
+// ===================================================================================
 export const getArtist = async (access_token: string, id: string) => {
   const res = await fetch(`${API_ENDPOINT}/artists/${id}`, {
     headers: {
@@ -181,6 +242,7 @@ export const getArtist = async (access_token: string, id: string) => {
   return data;
 };
 
+// FOLLOW, UNFOLLOW, CHECK FOLLOWING ARTIST
 export const checkFollowing = async (id: string, access_token: string) => {
   const options = {
     method: "GET",
@@ -229,3 +291,4 @@ export const unfollowArtist = async (id: string, access_token: string) => {
   );
   return res.status;
 };
+// ===================================================================================
