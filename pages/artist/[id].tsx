@@ -54,7 +54,7 @@ const Artist = ({
     <div className="flex flex-col justify-start mx-36 mb-4 pb-24">
       <Head>
         <title>{artist.name}</title>
-        <link rel="icon" href={artist.images  [0].url} />
+        <link rel="icon" href={artist.images[0].url} />
       </Head>
       {/* TOP */}
       <div className="flex items-center">

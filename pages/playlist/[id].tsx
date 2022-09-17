@@ -1,10 +1,8 @@
 import { GetServerSidePropsContext } from "next";
-import { getSession } from "next-auth/react";
-
+import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
-import TrackList, { Track } from "../../components/TrackList";
+import TrackList from "../../components/TrackList";
 import Head from "next/head";
-import Card from "../../components/Card";
 import { getPlaylist } from "../../library/spotify";
 import Link from "next/link";
 

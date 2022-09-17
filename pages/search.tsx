@@ -1,5 +1,3 @@
-import Link from "next/link";
-import React from "react";
 import { useState, useEffect } from "react";
 import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
