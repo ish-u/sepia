@@ -44,6 +44,7 @@ export default NextAuth({
         token.refreshToken = account.refresh_token;
         token.accessToken = account.access_token;
         token.expiresAt = (account.expires_at as number) * 1000;
+        token.userID = user.id;
       }
 
       // return the original token till it's valid
@@ -66,6 +67,7 @@ export default NextAuth({
     },
     async session({ session, token, user }) {
       session.accessToken = token.accessToken as string;
+      session.userID = token.userID;
       return session;
     },
   },
