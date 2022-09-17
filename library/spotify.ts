@@ -141,3 +141,91 @@ export const playAlbumPlaylistArtist = async (
   );
   return res.status;
 };
+
+// ALBUM
+export const getArtistAlbum = async (access_token: string, id: string) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/artists/${id}/albums?limit=50&include_groups=album,single`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+// TRACK
+export const getTopTracks = async (access_token: string, id: string) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/artists/${id}/top-tracks?market=IN`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+// FOLLOW, UNFOLLOW, CHECK FOLLOWING ARTIST
+export const getArtist = async (access_token: string, id: string) => {
+  const res = await fetch(`${API_ENDPOINT}/artists/${id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  const data = await res.json();
+  return data;
+};
+
+export const checkFollowing = async (id: string, access_token: string) => {
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/me/following/contains?type=artist&ids=${id}`,
+    options
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const followArtist = async (id: string, access_token: string) => {
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/me/following?type=artist&ids=${id}`,
+    options
+  );
+  return res.status;
+};
+
+export const unfollowArtist = async (id: string, access_token: string) => {
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application.json",
+      Authorization: "Bearer " + access_token,
+      Accept: "application/json",
+    },
+  };
+  const res = await fetch(
+    `${API_ENDPOINT}/me/following?type=artist&ids=${id}`,
+    options
+  );
+  return res.status;
+};

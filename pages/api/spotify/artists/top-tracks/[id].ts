@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const API_ENDPOINT: string = "https://api.spotify.com/v1";
 
-export const getTopTracks = async (access_token: string, id: string) => {
+ const getTopTracks = async (access_token: string, id: string) => {
   console.log(`${API_ENDPOINT}/artists/${id}/top-tracks?market=IN`);
   return fetch(`${API_ENDPOINT}/artists/${id}/top-tracks?market=IN`, {
     headers: {

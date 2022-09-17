@@ -5,10 +5,12 @@ const client_id = process.env.SPOTIFY_CLIENT_ID || "";
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET || "";
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = process.env.TOKEN_ENDPOINT;
-const scopes =
-  "user-read-private user-read-email streaming user-read-email user-read-playback-state user-modify-playback-state user-top-read user-read-recently-played playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-read"
-    .split(" ")
-    .join(",");
+const scopes = `user-read-private user-read-email streaming user-read-email 
+   user-read-playback-state user-modify-playback-state user-top-read
+   user-read-recently-played playlist-read-collaborative playlist-modify-public 
+   playlist-modify-private user-library-read user-follow-modify user-follow-read`
+  .split(" ")
+  .join(",");
 
 // function for token rotation
 const refreshAccessToken = async (refresh_token: string) => {
