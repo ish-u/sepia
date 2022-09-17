@@ -1,10 +1,18 @@
 import { GetServerSidePropsContext } from "next";
-import { getSession } from "next-auth/react";
-import { getAlbum } from "../api/spotify/albums/[id]";
+import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import TrackList from "../../components/TrackList";
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
+import {
+  getAlbum,
+  isLiked,
+  likeAlbum,
+  unlikeAlbum,
+} from "../../library/spotify";
+import { Play } from "../../components/Card";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 const getFormattedTime = (seconds: number) => {
   return (
@@ -15,7 +23,16 @@ const getFormattedTime = (seconds: number) => {
   );
 };
 
-const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
+const Album = ({
+  album,
+  isLiked,
+}: {
+  album: SpotifyApi.AlbumObjectFull;
+  isLiked: boolean;
+}) => {
+  const [liked, setLiked] = useState(isLiked);
+  const { data: session } = useSession();
+
   const getAlbumDuration = (
     tracks: SpotifyApi.TrackObjectSimplified[]
   ): string => {
@@ -25,6 +42,16 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
     }
     duration = duration / 1000;
     return getFormattedTime(duration);
+  };
+
+  const toggleLiked = async () => {
+    if (liked) {
+      await unlikeAlbum(session?.accessToken || "", album.id);
+      setLiked(false);
+    } else {
+      await likeAlbum(session?.accessToken || "", album.id);
+      setLiked(true);
+    }
   };
 
   return (
@@ -50,7 +77,7 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
           <div className="text-xs m-2 font-bold">
             {album.type.toUpperCase()}
           </div>
-          <div className="text-6xl font-bold break-words">{album.name}</div>
+          <div className="text-6xl font-bold line-clamp-2">{album.name}</div>
           <div className="text-md  m-2 flex font-bold">
             {album.artists.map((artist) => {
               return (
@@ -68,6 +95,12 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
               <span className="text-black/50">
                 {getAlbumDuration(album.tracks.items)}
               </span>
+            </div>
+          </div>
+          <div className="m-2 flex items-center">
+            <Play show={true} uri={album.uri} />
+            <div className="mx-4 text-4xl" onClick={toggleLiked}>
+              {liked ? <MdFavorite /> : <MdFavoriteBorder />}
             </div>
           </div>
         </div>
@@ -99,13 +132,15 @@ const Album = ({ album }: { album: SpotifyApi.AlbumObjectFull }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
   const session = await getSession(context);
-  const album: SpotifyApi.AlbumObjectFull = await (
-    await getAlbum(session?.accessToken || "", id as string)
-  ).json();
-  console.log(album);
-
+  const album: SpotifyApi.AlbumObjectFull = await getAlbum(
+    session?.accessToken || "",
+    id as string
+  );
+  const liked: boolean = [
+    await isLiked(session?.accessToken || "", album.id),
+  ][0];
   return {
-    props: { album },
+    props: { album, isLiked: liked },
   };
 }
 
