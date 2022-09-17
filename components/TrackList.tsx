@@ -86,10 +86,12 @@ export const Track = ({
                       href={`/artist/${artist.id}`}
                     >
                       <span className="hover:underline hover:text-black">
-                        {artist.name}
+                        <>{artist.name}</>
                       </span>
                     </Link>
-                    <span>{idx !== track.artists.length - 1 ? ", " : ""}</span>
+                    <span>
+                      <>{idx !== track.artists.length - 1 ? ", " : ""}</>
+                    </span>
                   </div>
                 );
               })}

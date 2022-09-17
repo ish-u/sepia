@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   getAlbum,
-  isLiked,
+  isAlbumLiked,
   likeAlbum,
   unlikeAlbum,
 } from "../../library/spotify";
@@ -60,7 +60,7 @@ const Album = ({
         <title>
           {album.name} | {album.artists.map((artist) => artist.name)}
         </title>
-        <link rel="icon" href={album.images[0].url} />
+        {album.images && <link rel="icon" href={album.images[0].url} />}
       </Head>
       {/* TOP AREA */}
       <div className="flex justify-start ">
@@ -77,7 +77,9 @@ const Album = ({
           <div className="text-xs m-2 font-bold">
             {album.type.toUpperCase()}
           </div>
-          <div className="text-6xl font-bold line-clamp-2">{album.name}</div>
+          <div className="text-6xl font-bold line-clamp-1 py-2">
+            {album.name}
+          </div>
           <div className="text-md  m-2 flex font-bold">
             {album.artists.map((artist) => {
               return (
@@ -117,9 +119,9 @@ const Album = ({
             dateStyle: "long",
           }).format(new Date(album.release_date))}
         </div>
-        {album.copyrights.map((copyright) => {
+        {album.copyrights.map((copyright, idx) => {
           return (
-            <div className="text-xs font-extralight" key={copyright.text}>
+            <div className="text-xs font-extralight" key={copyright.text + idx}>
               {copyright.text}
             </div>
           );
@@ -136,11 +138,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     session?.accessToken || "",
     id as string
   );
-  const liked: boolean = [
-    await isLiked(session?.accessToken || "", album.id),
-  ][0];
+  const isLiked: boolean = (
+    await isAlbumLiked(session?.accessToken || "", album.id)
+  )[0];
   return {
-    props: { album, isLiked: liked },
+    props: { album, isLiked },
   };
 }
 
