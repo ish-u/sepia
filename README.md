@@ -2,7 +2,7 @@
 
 A Spotify Client made using NextJS, NextAuth, TailwindCSS
 
-![](demo//sepia.gif)
+![](demo/sepia.gif)
 
 ---
 
