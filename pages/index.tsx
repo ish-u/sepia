@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import { useContext } from "react";
 import { AppContext } from "../context/context";
 import { GetServerSidePropsContext } from "next";
@@ -9,9 +8,7 @@ import {
   getRecentPlayed,
   getUserTopItems,
 } from "../library/spotify";
-
 import { Track } from "../components/TrackList";
-import Card from "../components/Card";
 import Slider from "../components/Slider";
 
 const Home = ({
@@ -21,9 +18,9 @@ const Home = ({
   releases,
   featured,
 }: {
-  recently: SpotifyApi.UsersRecentlyPlayedTracksResponse;
+  recently: SpotifyApi.TrackObjectFull[];
   top_artists: SpotifyApi.UsersTopArtistsResponse;
-  top_tracks: SpotifyApi.UsersTopTracksResponse;
+  top_tracks: SpotifyApi.TrackObjectFull[];
   releases: SpotifyApi.ListOfNewReleasesResponse;
   featured: SpotifyApi.ListOfFeaturedPlaylistsResponse;
 }) => {
@@ -58,21 +55,21 @@ const Home = ({
           <div className="text-3xl px-4 my-4 font-semibold">
             Recently Played
           </div>
-          {recently.items.slice(0, 5).map((track) => {
+          {recently.map((track) => {
             return (
               <Track
                 showArtist={true}
                 showIdx={false}
-                img={track.track.album.images[0]}
-                key={track.track.id}
-                track={track.track}
+                img={track.album.images[0]}
+                key={track.id}
+                track={track}
               />
             );
           })}
         </div>
         <div className="w-3/6 my-8">
           <div className="text-3xl px-4 my-4 font-semibold">Top Tracks</div>
-          {top_tracks.items.slice(0, 5).map((track) => (
+          {top_tracks.map((track) => (
             <Track
               showArtist={true}
               showIdx={false}
@@ -89,14 +86,19 @@ const Home = ({
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
-  const recently: SpotifyApi.UsersRecentlyPlayedTracksResponse =
-    await getRecentPlayed(session?.accessToken || "");
-
   if (session?.accessToken) {
-    const top_tracks: SpotifyApi.UsersTopTracksResponse = await getUserTopItems(
-      session?.accessToken,
-      "tracks"
-    );
+    const recently: SpotifyApi.TrackObjectFull[] = (
+      (await getRecentPlayed(
+        session?.accessToken || ""
+      )) as SpotifyApi.UsersRecentlyPlayedTracksResponse
+    ).items
+      .map((item) => item.track)
+      .slice(0, 5);
+
+    const top_tracks: SpotifyApi.TrackObjectFull[] = (
+      await getUserTopItems(session?.accessToken, "tracks")
+    ).items.slice(0, 5);
+
     const top_artists: SpotifyApi.UsersTopArtistsResponse =
       await getUserTopItems(session?.accessToken, "artists");
 
@@ -108,7 +110,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     );
 
     return {
-      props: { recently, top_artists, top_tracks, featured, releases },
+      props: {
+        recently,
+        top_artists,
+        top_tracks,
+        featured,
+        releases,
+      },
     };
   }
 
