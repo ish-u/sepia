@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { Play } from "../../components/Card";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
+import fallbackURL from "../../public/fallback.jpg";
+
 const Playlist = ({
   playlist,
   tracks,
@@ -57,15 +59,18 @@ const Playlist = ({
     <div className="mx-32 mb-32 my-4">
       <Head>
         <title>{playlist.name}</title>
-        {playlist.images && <link rel="icon" href={playlist.images[0].url} />}
+        {playlist.images.length && (
+          <link rel="icon" type="image" href={playlist.images[0].url} />
+        )}
       </Head>
       <div className="mx-8 flex">
         <div className="p-4">
           <Image
+            className="object-cover"
             layout="fixed"
             height={240}
             width={240}
-            src={playlist.images[0].url}
+            src={playlist.images.length ? playlist.images[0].url : fallbackURL}
             alt="Playlist Art"
           ></Image>
         </div>

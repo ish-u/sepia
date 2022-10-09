@@ -5,6 +5,7 @@ import { playAlbumPlaylistArtist } from "../library/spotify";
 import { useSession } from "next-auth/react";
 import { AppContext } from "../context/context";
 import { MdPlayArrow } from "react-icons/md";
+import fallbackURL from "../public/fallback.jpg";
 
 export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
   const { data: session } = useSession();
@@ -66,13 +67,10 @@ export const Card = ({
           <div className="px-4 py-1 pt-4 relative">
             <Image
               className={rounded ? "rounded-full" : "rounded-md"}
-              src={
-                img?.url ||
-                "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bGVuc3xlbnwwfHwwfHw%3D&w=1000&q=80"
-              }
+              src={img?.url || fallbackURL}
               height={"144px"}
               layout="fixed"
-              objectFit="contain"
+              objectFit="cover"
               width={"144px"}
               alt={type + " art"}
             />
