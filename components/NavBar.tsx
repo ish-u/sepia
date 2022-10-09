@@ -14,7 +14,9 @@ import { useSession } from "next-auth/react";
 const BackButton = () => {
   const router = useRouter();
   const goBack = () => {
-    router.back();
+    if (router.pathname !== "/") {
+      router.back();
+    }
   };
 
   return (
