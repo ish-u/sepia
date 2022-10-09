@@ -18,7 +18,7 @@ export default function SignIn({
                 className="text-white drop-shadow-xl text-2xl flex flex-row items-center justify-center align-middle p-4 my-2 hover:scale-105 duration-150 ease-in-out bg-black rounded-full"
                 onClick={() =>
                   signIn(provider.id, {
-                    callbackUrl: "http://localhost:3000",
+                    callbackUrl: "/",
                   })
                 }
               >

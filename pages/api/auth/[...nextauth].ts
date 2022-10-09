@@ -83,5 +83,6 @@ export default NextAuth({
   },
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
+    maxAge: 5 * 60 * 1000,
   },
 });
