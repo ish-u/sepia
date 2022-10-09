@@ -1,3 +1,5 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "../../../library/prisma";
 import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 
@@ -30,6 +32,7 @@ const refreshAccessToken = async (refresh_token: string) => {
 };
 
 export default NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
     SpotifyProvider({
       authorization: `https://accounts.spotify.com/authorize?scope=${scopes}`,
@@ -44,7 +47,7 @@ export default NextAuth({
         token.refreshToken = account.refresh_token;
         token.accessToken = account.access_token;
         token.expiresAt = (account.expires_at as number) * 1000;
-        token.userID = user.id;
+        token.userID = account.providerAccountId;
       }
 
       // return the original token till it's valid
@@ -74,5 +77,12 @@ export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+    maxAge: 5 * 60 * 1000,
   },
 });
