@@ -1,4 +1,27 @@
 const API_ENDPOINT: string = "https://api.spotify.com/v1";
+const client_id = process.env.SPOTIFY_CLIENT_ID;
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+
+export const getServerAccessToken = async () => {
+  // fetch access token
+  const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
+  var tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basic " + basic,
+      Accept: "application/json",
+    },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+    }).toString(),
+  });
+
+  // access token for query
+  const token = (await tokenResponse.json())?.access_token;
+
+  return token;
+};
 
 export const getUserQueue = async (access_token: string) => {
   const data = await fetch(`${API_ENDPOINT}/me/player/queue`, {
@@ -135,11 +158,31 @@ export const playAlbumPlaylistArtist = async (
 // PLAYLIST
 // ===================================================================================
 export const getPlaylist = async (id: string, access_token: string) => {
-  const res = await fetch(`${API_ENDPOINT}/playlists/${id}`, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
+  const res = await fetch(
+    `${API_ENDPOINT}/playlists/${id}?fields=id,owner(display_name),name,images,tracks(limit,total),snapshot_id`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+export const getPlaylistTracks = async (
+  id: string,
+  offset: number,
+  access_token: string
+) => {
+  const res = await fetch(
+    `${API_ENDPOINT}/playlists/${id}/tracks?offset=${offset}&fields=items(track(id,name,duration_ms,artists(name,id),album(name,id)))`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
   const data = await res.json();
   return data;
 };
