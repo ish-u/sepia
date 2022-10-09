@@ -1,12 +1,13 @@
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import TrackList from "../../components/TrackList";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getAlbum,
+  getServerAccessToken,
   isAlbumLiked,
   likeAlbum,
   unlikeAlbum,
@@ -28,7 +29,7 @@ const Album = ({
   isLiked,
 }: {
   album: SpotifyApi.AlbumObjectFull;
-  isLiked: boolean;
+  isLiked?: boolean;
 }) => {
   const [liked, setLiked] = useState(isLiked);
   const { data: session } = useSession();
@@ -54,11 +55,20 @@ const Album = ({
     }
   };
 
+  useEffect(() => {
+    if (session?.accessToken) {
+      (async () => {
+        const isLiked = (await isAlbumLiked(session?.accessToken, album.id))[0];
+        setLiked(isLiked);
+      })();
+    }
+  }, [session?.accessToken, album.id]);
+
   return (
     <div className="flex flex-col mx-36 mb-4 pb-24">
       <Head>
         <title>
-          {album.name} | {album.artists.map((artist) => artist.name)}
+          {album.name} | {album.artists.map((artist) => artist.name).toString()}
         </title>
         {album.images && <link rel="icon" href={album.images[0].url} />}
       </Head>
@@ -131,18 +141,35 @@ const Album = ({
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.query;
-  const session = await getSession(context);
-  const album: SpotifyApi.AlbumObjectFull = await getAlbum(
-    session?.accessToken || "",
-    id as string
-  );
-  const isLiked: boolean = (
-    await isAlbumLiked(session?.accessToken || "", album.id)
-  )[0];
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   const { id } = context.query;
+//   const session = await getSession(context);
+//   const album: SpotifyApi.AlbumObjectFull = await getAlbum(
+//     session?.accessToken || "",
+//     id as string
+//   );
+//   const isLiked: boolean = (
+//     await isAlbumLiked(session?.accessToken || "", album.id)
+//   )[0];
+//   return {
+//     props: { album, isLiked },
+//   };
+// }
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const id = context.params?.id as string;
+  const accessToken = await getServerAccessToken();
+  const album: SpotifyApi.AlbumObjectFull = await getAlbum(accessToken, id);
+  // const isLiked: boolean = (await isAlbumLiked(accessToken, album.id))[0];
   return {
-    props: { album, isLiked },
+    props: { album },
+  };
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
   };
 }
 

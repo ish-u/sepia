@@ -1,31 +1,48 @@
-import { GetServerSidePropsContext } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { GetStaticPropsContext } from "next";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import TrackList from "../../components/TrackList";
 import Head from "next/head";
 import {
   getPlaylist,
+  getPlaylistTracks,
+  getServerAccessToken,
   isPlaylistLiked,
   likePlaylist,
   unlikePlaylist,
 } from "../../library/spotify";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Play } from "../../components/Card";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 const Playlist = ({
   playlist,
   tracks,
-  isLiked,
 }: {
   playlist: SpotifyApi.PlaylistObjectFull;
   tracks: SpotifyApi.TrackObjectFull[];
-  isLiked: boolean;
 }) => {
   const { data: session } = useSession();
 
-  const [liked, setLiked] = useState(isLiked);
+  // Playlist is liked or not
+  const [liked, setLiked] = useState(false);
+  useEffect(() => {
+    if (session?.accessToken) {
+      (async () => {
+        const isLiked: boolean = (
+          await isPlaylistLiked(
+            session?.accessToken || "",
+            session?.userID || "",
+            playlist.id
+          )
+        )[0];
+        setLiked(isLiked);
+      })();
+    }
+  }, [session?.accessToken, playlist.id, session?.userID]);
+
+  // toggle the like button
   const toggleLiked = async () => {
     if (liked) {
       await unlikePlaylist(session?.accessToken || "", playlist.id);
@@ -37,7 +54,7 @@ const Playlist = ({
   };
 
   return (
-    <div className="mx-32 my-4">
+    <div className="mx-32 mb-32 my-4">
       <Head>
         <title>{playlist.name}</title>
         {playlist.images && <link rel="icon" href={playlist.images[0].url} />}
@@ -58,8 +75,8 @@ const Playlist = ({
           </div>
           <div className="text-xl font-bold flex items-center">
             <div className="mr-2 text-black/75">Feat.</div>
-            {tracks.slice(0, 3).map((track) => (
-              <Link href={track.artists[0].id} key={track.id}>
+            {tracks.slice(0, 5).map((track) => (
+              <Link href={`/artist/${track.artists[0].id}`} key={track.id}>
                 <div className="hover:underline mr-2">
                   {track.artists[0].name}
                 </div>
@@ -90,26 +107,45 @@ const Playlist = ({
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.query;
-  const session = await getSession(context);
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const id = context.params?.id;
+  const accessToken = await getServerAccessToken();
+
+  // get the Playlist Details
   const playlist: SpotifyApi.PlaylistObjectFull = await getPlaylist(
     id as string,
-    session?.accessToken || ""
+    accessToken
   );
-  const tracks = [];
-  for (var i = 0; i < playlist.tracks.items.length; i++) {
-    tracks.push(playlist.tracks.items[i].track);
-  }
-  const isLiked: boolean = (
-    await isPlaylistLiked(
-      session?.accessToken || "",
-      session?.userID || "",
-      playlist.id
-    )
-  )[0];
+
+  // get all the playlist tracks
+  const playlistTracks = [];
+  var offset = 0;
+  do {
+    const tracks: SpotifyApi.PlaylistTrackResponse = await getPlaylistTracks(
+      playlist.id,
+      offset,
+      accessToken
+    );
+
+    for (var i = 0; i < tracks.items.length; i++) {
+      if (tracks.items[i] !== null && tracks.items[i].track !== null) {
+        playlistTracks.push(tracks.items[i].track);
+      }
+    }
+
+    offset += 100;
+  } while (offset < playlist.tracks.total);
+
   return {
-    props: { playlist, tracks, isLiked },
+    props: { playlist, tracks: playlistTracks },
+    revalidate: 3600,
+  };
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
   };
 }
 

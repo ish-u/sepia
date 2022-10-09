@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Track } from "../../components/TrackList";
@@ -10,10 +10,11 @@ import {
   checkFollowing,
   followArtist,
   unfollowArtist,
+  getServerAccessToken,
 } from "../../library/spotify";
 
 import Card, { Play } from "../../components/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Artist = ({
   artist,
@@ -24,13 +25,24 @@ const Artist = ({
   artist: SpotifyApi.ArtistObjectFull;
   tracks: SpotifyApi.TrackObjectFull[];
   albums: SpotifyApi.AlbumObjectSimplified[];
-  follows: boolean;
+  follows?: boolean;
 }) => {
   const { data: session } = useSession();
 
   const [albumType, setAlbumType] = useState("recent");
   const [showAll, setShowAll] = useState(5);
   const [following, setFollowing] = useState(follows);
+
+  useEffect(() => {
+    if (session?.accessToken) {
+      (async () => {
+        const isFollowing = (
+          await checkFollowing(artist.id, session.accessToken)
+        )[0];
+        setFollowing(isFollowing);
+      })();
+    }
+  }, [session?.accessToken, artist.id]);
 
   const toggleFollow = async () => {
     if (following) {
@@ -183,25 +195,29 @@ const Artist = ({
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.query;
-  const session = await getSession(context);
-  const artist: SpotifyApi.ArtistObjectFull = await getArtist(
-    session?.accessToken || "",
-    id as string
-  );
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const id = context.params?.id as string;
+  const accessToken = await getServerAccessToken();
+
+  // getting information about the artist
+  const artist: SpotifyApi.ArtistObjectFull = await getArtist(accessToken, id);
   const tracks: SpotifyApi.TrackObjectFull[] = (
-    await getTopTracks(session?.accessToken || "", id as string)
+    await getTopTracks(accessToken, id as string)
   ).tracks;
   const albums: SpotifyApi.AlbumObjectSimplified[] = (
-    await getArtistAlbum(session?.accessToken || "", id as string)
+    await getArtistAlbum(accessToken, id as string)
   ).items;
-  const follows: boolean = (
-    await checkFollowing(artist.id, session?.accessToken || "")
-  )[0];
+
   return {
-    props: { artist, tracks, albums, follows },
+    props: { artist, tracks, albums },
+    revalidate: 60 * 60 * 24,
   };
 }
 
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+}
 export default Artist;
