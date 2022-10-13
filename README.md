@@ -1,43 +1,69 @@
 # sepia
 
-A Spotify Client made using NextJS, NextAuth, TailwindCSS
+### A Spotify Client made using NextJS, NextAuth, TailwindCSS
+
+---
 
 ![](./demo/sepia.gif)
 
 ---
 
 ## Devlop Locally
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+- Clone the repo and install dependencies
 
-First, run the development server:
+  ```bash
+  git clone https://github.com/ish-u/sepia.git
+  cd sepia
+  npm install
+  ```
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Get necessary tokens, secrets and urls for the `.env` file
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  - Get the `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` from the [Spotify Developers Dashboard](https://developer.spotify.com/dashboard/applications) --> [Reference](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+  - Add the Callback URLs in the [Spotify Developers Dashboard](https://developer.spotify.com/dashboard/applications)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+    ![](demo/callback_url.png)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+  - Get `DATABASE_URL` from your locally running PSQL DB or setup using [Docker](https://www.docker.com/) --> [docker-compose file](docker-compose.yml)
 
-## Learn More
+  - The Final `.env` file will look like this
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    DATABASE_URL="*PSQL DB URL*"
+    SPOTIFY_CLIENT_ID="YOUR SPOTIFY CLIENT ID"
+    SPOTIFY_CLIENT_SECRET="*YOUR SPOTIFY CLIENT SECRET*"
+    NEXTAUTH_SECRET="*YOUR SECRET*"
+    NEXTAUTH_URL=http://localhost:3000/
+    NEXT_PUBLIC_API=http://localhost:3000
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Generate [Prisma](https://www.prisma.io/) Client and apply migrations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  ```bash
+  npx prisma generate
+  npx prisma migrate dev --name init
+  ```
 
-## Deploy on Vercel
+- Run the application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  ```
+  npm run dev
+  ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- The application will be live at [`http://localhost:3000/`](http://localhost:3000/)
+
+## References
+
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
+- [Spotify Web Playback SDK](https://developer.spotify.com/documentation/web-playback-sdk/)
+- [Spotify API Console](https://developer.spotify.com/console/)
+- [NextAuth](https://next-auth.js.org/)
+- [Prisma](https://www.prisma.io/)
+- [Docker](https://www.docker.com/)
+- [react-icons](https://react-icons.github.io/react-icons/)
+- [tailwindcss](https://tailwindcss.com/)
+- [Next.JS](https://nextjs.org/)
+
+### To try the live demo ping me on discord - `ish-u#5812`
