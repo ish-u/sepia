@@ -34,6 +34,7 @@ const FullScreen = ({
                   height={state.track.album.images[2].height || ""}
                   width={state.track.album.images[2].width || ""}
                   src={state.track.album.images[2].url}
+                  alt="Cover"
                 ></Image>
               </div>
               <div className="w-full md:w-3/4 md:h-full flex flex-col justify-end px-20 py-8 md:p-4">
