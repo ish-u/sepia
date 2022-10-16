@@ -21,7 +21,7 @@ import {
   MdSkipPrevious,
 } from "react-icons/md";
 import { SpotifyRepeatState } from "../../pages/api/spotify/player/repeat";
-const PlayerControls = () => {
+const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
   const { state, dispatch } = useContext(AppContext);
 
   // SHUFFLE
@@ -76,24 +76,33 @@ const PlayerControls = () => {
 
   return (
     <div className="flex justify-center align-middle items-center m-1">
+      {/* SHUFFLE */}
       <div
-        className="p-2"
+        className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
           await toggleShuffle();
           setShuffle(!shuffle);
         }}
       >
-        {shuffle === true && <MdShuffleOn className="w-6 h-6" />}
-        {shuffle === false && <MdShuffle className="w-6 h-6" />}
+        {shuffle === true && (
+          <MdShuffleOn className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
+        )}
+        {shuffle === false && (
+          <MdShuffle className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
+        )}
       </div>
+
+      {/* PREVIOUS */}
       <div
-        className="p-2"
+        className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
           await state.player?.previousTrack();
         }}
       >
-        <MdSkipPrevious className="h-6 w-6" />
+        <MdSkipPrevious className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
       </div>
+
+      {/* PLAY */}
       <div
         className="hover:cursor-pointer"
         onClick={async () => {
@@ -101,33 +110,37 @@ const PlayerControls = () => {
         }}
       >
         {!state.active ? (
-          <MdPlayCircle className="h-10 w-10" />
+          <MdPlayCircle className={fullscreen ? "h-20 w-20" : "h-10 w-10"} />
         ) : (
-          <MdPauseCircle className="h-10 w-10" />
+          <MdPauseCircle className={fullscreen ? "h-20 w-20" : "h-10 w-10"} />
         )}
       </div>
 
+      {/* NEXT */}
       <div
-        className="p-2"
+        className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
           await state.player?.nextTrack();
         }}
       >
-        <MdSkipNext className="h-6 w-6" />
+        <MdSkipNext className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
       </div>
 
+      {/* REPEAT */}
       <div
-        className="p-2"
+        className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
           await toggleRepeat();
         }}
       >
-        {repeat === SpotifyRepeatState.off && <MdRepeat className="w-6 h-6" />}
+        {repeat === SpotifyRepeatState.off && (
+          <MdRepeat className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
+        )}
         {repeat === SpotifyRepeatState.track && (
-          <MdRepeatOneOn className="w-6 h-6" />
+          <MdRepeatOneOn className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
         )}
         {repeat === SpotifyRepeatState.context && (
-          <MdRepeatOn className="w-6 h-6" />
+          <MdRepeatOn className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
         )}
       </div>
     </div>

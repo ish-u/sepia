@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   MdQueueMusic,
   MdVolumeDown,
@@ -7,10 +7,17 @@ import {
   MdVolumeMute,
   MdOpenInFull,
 } from "react-icons/md";
+import { AppContext } from "../../context/context";
 
-const SideControls = ({ player }: { player: Spotify.Player }) => {
+const SideControls = ({
+  player,
+  setShowFullScreen,
+}: {
+  player: Spotify.Player;
+  setShowFullScreen: (value: boolean) => void;
+}) => {
   const [volumne, setVolume] = useState(50);
-
+  const { state } = useContext(AppContext);
   const setPlayerVolume = async (value: string) => {
     setVolume(parseInt(value));
     await player.setVolume(parseInt(value) / 100);
@@ -40,7 +47,14 @@ const SideControls = ({ player }: { player: Spotify.Player }) => {
         }}
         type="range"
       />
-      <div className="p-1 m-1 ">
+      <div
+        className="p-1 m-1"
+        onClick={() => {
+          if (state.track !== undefined) {
+            setShowFullScreen(true);
+          }
+        }}
+      >
         <MdOpenInFull className="h-6 w-6 " />
       </div>
     </div>

@@ -6,8 +6,12 @@ import PlayerControls from "./PlayerControls";
 import SeekBar from "./SeekBar";
 import SideControls from "./SideControls";
 import SongInformation from "./SongInformation";
+import FullScreen from "./FullScreen";
 
 const Player = () => {
+  // full screen
+  const [showFullScreen, setShowFullScreen] = useState(false);
+
   // getting the AppState from the AppContext
   const { state, dispatch } = useContext(AppContext);
 
@@ -97,18 +101,24 @@ const Player = () => {
         <div className="fixed w-full bottom-0 left-0 bg-slate-700 text-white">
           <div className="m-2">
             <div className="flex justify-end  items-center">
-              <div className="w-3/12">{state.track && <SongInformation />}</div>
+              <div className="md:grow-0 grow md:w-3/12 w-9/12">
+                {state.track && <SongInformation />}
+              </div>
               <div className="flex flex-grow flex-col justify-center items-center align-middle">
-                <PlayerControls />
-                <div className="flex flex-col justify-center w-5/6">
+                <PlayerControls fullscreen={false} />
+                <div className="flex-col justify-center hidden md:flex w-5/6">
                   <SeekBar player={state.player} />
                 </div>
               </div>
-              <div className="w-3/12">
-                <SideControls player={state.player} />
+              <div className="w-3/12 hidden md:block">
+                <SideControls
+                  player={state.player}
+                  setShowFullScreen={setShowFullScreen}
+                />
               </div>
             </div>
           </div>
+          <FullScreen show={showFullScreen} setShow={setShowFullScreen} />
         </div>
       )}
     </>

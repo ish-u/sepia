@@ -10,7 +10,6 @@ import { ActionType } from "../context/actions";
 export default function Layout({ children }: { children: ReactElement }) {
   const { status } = useSession();
   const { state, dispatch } = useContext(AppContext);
-
   useEffect(() => {
     const getCurrentUser = async () => {
       const response = await fetch("/api/spotify/user/me");
@@ -20,6 +19,7 @@ export default function Layout({ children }: { children: ReactElement }) {
       }
     };
     if (state.user === undefined && status === "authenticated") {
+      console.log(status);
       getCurrentUser();
     }
   }, [state.user, status, dispatch]);
