@@ -16,19 +16,25 @@ const scopes = `user-read-private user-read-email streaming user-read-email
 
 // function for token rotation
 const refreshAccessToken = async (refresh_token: string) => {
-  const response = await fetch(TOKEN_ENDPOINT || "", {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${basic}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token,
-    }),
-  });
+  console.log(refresh_token);
+  try {
+    const response = await fetch(TOKEN_ENDPOINT || "", {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${basic}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token,
+      }),
+    });
 
-  return response.json();
+    return response.json();
+  } catch (e) {
+    console.log(e);
+    return "ERROR";
+  }
 };
 
 export default NextAuth({
@@ -54,6 +60,7 @@ export default NextAuth({
       // console.log(
       //   Date.now(),
       //   token?.expiresAt ? token.expiresAt : 0,
+      //   Date.now() < (token?.expiresAt ? token.expiresAt : 0),
       //   token.accessToken
       // );
       if (Date.now() < (token?.expiresAt ? token.expiresAt : 0)) {
@@ -80,9 +87,5 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-    maxAge: 5 * 60 * 1000,
   },
 });
