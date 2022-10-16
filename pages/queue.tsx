@@ -23,7 +23,7 @@ const Queue = () => {
     getUserQueue();
   }, [state.track, dispatch]);
 
-  useEffect(() => {}, [state.track]);
+  useEffect(() => {}, [state.track, state.queue]);
 
   return (
     <div className="mx-36 p-8">
