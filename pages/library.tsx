@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { GetServerSidePropsContext } from "next";
-import { getSession, useSession } from "next-auth/react";
-import { getUserSavedAlbums, getUserSavedPlaylists } from "../library/spotify";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import Card from "../components/Card";
+import { Loader } from "../components/Loader";
+import { getUserSavedAlbums, getUserSavedPlaylists } from "../library/spotify";
 
 const Library = () => {
   const { data: session } = useSession();
@@ -11,10 +11,12 @@ const Library = () => {
     SpotifyApi.PlaylistObjectSimplified[]
   >([]);
   const [toShow, setToShow] = useState<"albums" | "playlists">("albums");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getAlbums = async () => {
       if (session?.accessToken) {
+        setIsLoading(true);
         var total = 50;
         var i = 0;
         do {
@@ -30,6 +32,7 @@ const Library = () => {
             });
           });
           i += 50;
+          setIsLoading(false);
         } while (i < total);
       }
     };
@@ -60,62 +63,68 @@ const Library = () => {
   }, [session?.accessToken]);
 
   return (
-    <div className="mx-32 my-4 mb-32">
-      <div className="flex justify-start">
-        <div
-          className={`p-2 ml-4  font-semibold rounded-md ${
-            toShow === "albums" ? "bg-slate-600" : "bg-slate-400"
-          } text-white hover:bg-slate-500`}
-          onClick={() => {
-            setToShow("albums");
-          }}
-        >
-          Albums
+    <>
+      <div className="mx-32 my-4 mb-32">
+        <div className="flex justify-start">
+          <div
+            className={`p-2 ml-4  font-semibold rounded-md ${
+              toShow === "albums" ? "bg-slate-600" : "bg-slate-400"
+            } text-white hover:bg-slate-500`}
+            onClick={() => {
+              setToShow("albums");
+            }}
+          >
+            Albums
+          </div>
+          <div
+            className={`p-2 ml-4  font-semibold rounded-md ${
+              toShow === "playlists" ? "bg-slate-600" : "bg-slate-400"
+            } text-white hover:bg-slate-500`}
+            onClick={() => {
+              setToShow("playlists");
+            }}
+          >
+            Playlists
+          </div>
         </div>
-        <div
-          className={`p-2 ml-4  font-semibold rounded-md ${
-            toShow === "playlists" ? "bg-slate-600" : "bg-slate-400"
-          } text-white hover:bg-slate-500`}
-          onClick={() => {
-            setToShow("playlists");
-          }}
-        >
-          Playlists
-        </div>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="flex justify-start flex-wrap">
+            {toShow === "albums" &&
+              albums &&
+              albums.map((album) => (
+                <div className="m-4" key={album.id}>
+                  <Card
+                    id={album.id}
+                    img={album.images[0]}
+                    rounded={false}
+                    title={album.name}
+                    subtitle={album.type}
+                    type={album.type}
+                    uri={album.uri}
+                  />
+                </div>
+              ))}
+            {toShow === "playlists" &&
+              playlists &&
+              playlists.map((playlist) => (
+                <div className="m-4" key={playlist.id}>
+                  <Card
+                    id={playlist.id}
+                    img={playlist.images[0]}
+                    rounded={false}
+                    title={playlist.name}
+                    subtitle={`By ${playlist.owner.display_name}`}
+                    type="playlist"
+                    uri={playlist.uri}
+                  />
+                </div>
+              ))}
+          </div>
+        )}
       </div>
-      <div className="flex justify-start flex-wrap">
-        {toShow === "albums" &&
-          albums &&
-          albums.map((album) => (
-            <div className="m-4" key={album.id}>
-              <Card
-                id={album.id}
-                img={album.images[0]}
-                rounded={false}
-                title={album.name}
-                subtitle={album.type}
-                type={album.type}
-                uri={album.uri}
-              />
-            </div>
-          ))}
-        {toShow === "playlists" &&
-          playlists &&
-          playlists.map((playlist) => (
-            <div className="m-4" key={playlist.id}>
-              <Card
-                id={playlist.id}
-                img={playlist.images[0]}
-                rounded={false}
-                title={playlist.name}
-                subtitle={`By ${playlist.owner.display_name}`}
-                type="playlist"
-                uri={playlist.uri}
-              />
-            </div>
-          ))}
-      </div>
-    </div>
+    </>
   );
 };
 

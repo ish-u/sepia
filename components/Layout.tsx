@@ -1,11 +1,10 @@
-import { ReactElement } from "react";
+import { useSession } from "next-auth/react";
+import { ReactElement, useContext, useEffect } from "react";
+import { ActionType } from "../context/actions";
+import { AppContext } from "../context/context";
+import { SpotifyUser } from "../pages/api/spotify/user/me";
 import NavBar from "./NavBar";
 import Player from "./Player";
-import { useSession } from "next-auth/react";
-import { useContext, useEffect } from "react";
-import { SpotifyUser } from "../pages/api/spotify/user/me";
-import { AppContext } from "../context/context";
-import { ActionType } from "../context/actions";
 
 export default function Layout({ children }: { children: ReactElement }) {
   const { status } = useSession();

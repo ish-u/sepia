@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getUserLikedTracks } from "../library/spotify";
-import TrackList from "../components/TrackList";
+import { useEffect, useState } from "react";
 import { MdFavoriteBorder } from "react-icons/md";
+import { Loader } from "../components/Loader";
+import TrackList from "../components/TrackList";
+import { getUserLikedTracks } from "../library/spotify";
 
 const Liked = () => {
   const { data: session } = useSession();
   const [tracks, setTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
   const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getTracks = async () => {
       if (!tracks.length && session?.accessToken) {
+        setIsLoading(true);
         const res: SpotifyApi.UsersSavedTracksResponse =
           await getUserLikedTracks(session?.accessToken || "", 0);
         res.items.map((item) => {
@@ -23,8 +26,8 @@ const Liked = () => {
           });
         });
         setTotal(res.total);
+        setIsLoading(false);
         for (var i = res.limit; i <= res.total; i = i + res.limit) {
-          setTimeout(() => {}, 1000);
           const res1: SpotifyApi.UsersSavedTracksResponse =
             await getUserLikedTracks(session?.accessToken || "", i);
           res1.items.map((item) => {
@@ -42,22 +45,28 @@ const Liked = () => {
   }, [session?.accessToken, tracks.length]);
 
   return (
-    <div className="mx-36 my-8 mb-32">
-      <div className="mx-8">
-        <div className="text-6xl font-semibold  flex">
-          <MdFavoriteBorder />
-          <span className="ml-4">{total} Liked Songs</span>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="mx-36 my-8 mb-32">
+          <div className="mx-8">
+            <div className="text-6xl font-semibold  flex">
+              <MdFavoriteBorder />
+              <span className="ml-4">{total} Liked Songs</span>
+            </div>
+          </div>
+          <div className="my-10">
+            <TrackList
+              tracks={tracks}
+              showAlbum={true}
+              showArtist={true}
+              showIdx={true}
+            />
+          </div>
         </div>
-      </div>
-      <div className="my-10">
-        <TrackList
-          tracks={tracks}
-          showAlbum={true}
-          showArtist={true}
-          showIdx={true}
-        />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
