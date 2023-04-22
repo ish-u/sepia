@@ -3,7 +3,6 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import { Loader } from "../components/Loader";
 import { AppProvider } from "../context/context";
 import { useIsLoadingRoute } from "../hooks/useLoading";
 import "../styles/globals.css";
@@ -18,7 +17,6 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: ExtendedAppProps) {
-  const { isLoadingRoute } = useIsLoadingRoute();
 
   return (
     <SessionProvider session={session}>
@@ -44,7 +42,7 @@ function MyApp({
       </Head>
       <AppProvider>
         <Layout>
-          {isLoadingRoute ? <Loader /> : <Component {...pageProps} />}
+          <Component {...pageProps} />
         </Layout>
       </AppProvider>
     </SessionProvider>

@@ -1,15 +1,16 @@
-import { useContext } from "react";
-import { AppContext } from "../context/context";
 import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
+import { useContext } from "react";
+import Slider from "../components/Slider";
+import { Track } from "../components/TrackList";
+import { AppContext } from "../context/context";
+import { useIsLoadingRoute } from "../hooks/useLoading";
 import {
   getFeaturedPlaylists,
   getNewReleases,
   getRecentPlayed,
   getUserTopItems,
 } from "../library/spotify";
-import { Track } from "../components/TrackList";
-import Slider from "../components/Slider";
 
 const Home = ({
   recently,
@@ -25,6 +26,7 @@ const Home = ({
   featured: SpotifyApi.ListOfFeaturedPlaylistsResponse;
 }) => {
   const { state, dispatch } = useContext(AppContext);
+  const { isLoadingRoute } = useIsLoadingRoute();
   return (
     <div className="m-4 mx-32 mb-32">
       <div className="text-4xl mb-8">
