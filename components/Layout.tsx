@@ -25,11 +25,21 @@ export default function Layout({ children }: { children: ReactElement }) {
   }, [user, status, setUser]);
 
   return (
-    <>
+    <div className="max-w-screen-2xl">
       <div className="fixed top-0 left-0 h-full w-full -z-50  bg-gradient-to-b from-[#FFDCCC] to-slate-400"></div>
-      <NavBar />
-      {children}
-      <Player />
-    </>
+      {status === "authenticated" && (
+        <>
+          <NavBar />
+          {children}
+          <Player />
+        </>
+      )}
+      {status === "unauthenticated" && (
+        <>
+          {children}
+          <Player />
+        </>
+      )}
+    </div>
   );
 }
