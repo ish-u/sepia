@@ -17,7 +17,7 @@ const Queue = () => {
     };
 
     getUserQueue();
-  }, [track]);
+  }, [track, setQueue]);
 
   useEffect(() => {}, [track, queue]);
 

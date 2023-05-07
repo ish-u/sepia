@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: ReactElement }) {
       console.log(status);
       getCurrentUser();
     }
-  }, [user, status]);
+  }, [user, status, setUser]);
 
   return (
     <>

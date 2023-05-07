@@ -86,7 +86,15 @@ const Player = () => {
     } else {
       console.log("PLAYER EXISTS");
     }
-  }, [status, player, device_id]);
+  }, [
+    status,
+    player,
+    device_id,
+    changeDeviceId,
+    changeTrack,
+    setPlayer,
+    togglePlayback,
+  ]);
 
   return (
     <>
