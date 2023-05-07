@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { FiPlay, FiClock } from "react-icons/fi";
-import { AppContext } from "../context/context";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { FiClock, FiPlay } from "react-icons/fi";
+import { useSepiaStore } from "../store/store";
 
 const getFormattedTime = (seconds: number) => {
   return (
@@ -25,14 +25,12 @@ export const Track = ({
   album?: SpotifyApi.AlbumObjectSimplified;
   img?: SpotifyApi.ImageObject;
 }) => {
-  const { state, dispatch } = useContext(AppContext);
+  const device_id = useSepiaStore((state) => state.device_id);
   const [showPlay, setShowPlay] = useState(false);
 
   const playSong = async (id: string) => {
-    if (state.device_id) {
-      await fetch(
-        `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
-      );
+    if (device_id) {
+      await fetch(`/api/spotify/player/toggle?id=${id}&device_id=${device_id}`);
     }
   };
 

@@ -1,27 +1,28 @@
 import { useSession } from "next-auth/react";
-import { ReactElement, useContext, useEffect } from "react";
-import { ActionType } from "../context/actions";
-import { AppContext } from "../context/context";
+import { ReactElement, useEffect } from "react";
 import { SpotifyUser } from "../pages/api/spotify/user/me";
+import { useSepiaStore } from "../store/store";
 import NavBar from "./NavBar";
 import Player from "./Player";
 
 export default function Layout({ children }: { children: ReactElement }) {
+  const user = useSepiaStore((state) => state.user);
+  const setUser = useSepiaStore((state) => state.setUser);
   const { status } = useSession();
-  const { state, dispatch } = useContext(AppContext);
+
   useEffect(() => {
     const getCurrentUser = async () => {
       const response = await fetch("/api/spotify/user/me");
       if (response.status === 200) {
         const currentUser: SpotifyUser = await response.json();
-        dispatch({ type: ActionType.SetUser, payload: { user: currentUser } });
+        setUser(currentUser);
       }
     };
-    if (state.user === undefined && status === "authenticated") {
+    if (user === undefined && status === "authenticated") {
       console.log(status);
       getCurrentUser();
     }
-  }, [state.user, status, dispatch]);
+  }, [user, status]);
 
   return (
     <>

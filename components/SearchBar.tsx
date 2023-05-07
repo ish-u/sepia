@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { AppContext } from "../context/context";
-import { ActionType } from "../context/actions";
+import { useEffect, useState } from "react";
+import { useSepiaStore } from "../store/store";
 
 const API_ENDPOINT: string = "https://api.spotify.com/v1";
 
 const SearchBar = () => {
-  const { state, dispatch } = useContext(AppContext);
+  const device_id = useSepiaStore((state) => state.device_id);
+  const togglePlayback = useSepiaStore((state) => state.togglePlayback);
 
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState([]);
@@ -15,15 +14,10 @@ const SearchBar = () => {
   const playSong = async (id: string) => {
     console.log(id);
     const res = await fetch(
-      `/api/spotify/player/toggle?id=${id}&device_id=${state.device_id}`
+      `/api/spotify/player/toggle?id=${id}&device_id=${device_id}`
     );
     console.log(await res.json());
-    dispatch({
-      type: ActionType.Toggle,
-      payload: {
-        active: true,
-      },
-    });
+    togglePlayback(true);
   };
 
   useEffect(() => {

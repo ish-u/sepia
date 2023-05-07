@@ -1,43 +1,36 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../context/context";
-import {
-  FiPlay,
-  FiPause,
-  FiSkipBack,
-  FiSkipForward,
-  FiRepeat,
-  FiShuffle,
-} from "react-icons/fi";
+import { useEffect, useState } from "react";
 
 import {
-  MdPlayCircle,
   MdPauseCircle,
-  MdRepeatOn,
+  MdPlayCircle,
   MdRepeat,
+  MdRepeatOn,
+  MdRepeatOneOn,
   MdShuffle,
   MdShuffleOn,
-  MdRepeatOneOn,
   MdSkipNext,
   MdSkipPrevious,
 } from "react-icons/md";
 import { SpotifyRepeatState } from "../../pages/api/spotify/player/repeat";
+import { useSepiaStore } from "../../store/store";
 const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
-  const { state, dispatch } = useContext(AppContext);
+  // const { state, dispatch } = useContext(AppContext);
+  const player = useSepiaStore((state) => state.player);
+  const device_id = useSepiaStore((state) => state.device_id);
+  const active = useSepiaStore((state) => state.active);
 
   // SHUFFLE
   const [shuffle, setShuffle] = useState(false);
   const getShuffleState = async () => {
-    const shuffle = (await state.player?.getCurrentState())?.shuffle;
+    const shuffle = (await player?.getCurrentState())?.shuffle;
     setShuffle(shuffle || false);
   };
 
   const toggleShuffle = async () => {
     const shuffle =
-      (await state.player?.getCurrentState())?.shuffle === true
-        ? "false"
-        : "true";
+      (await player?.getCurrentState())?.shuffle === true ? "false" : "true";
     const resposne = await fetch(
-      `/api/spotify/player/shuffle?shuffle=${shuffle}&device_id=${state.device_id}`
+      `/api/spotify/player/shuffle?shuffle=${shuffle}&device_id=${device_id}`
     );
   };
 
@@ -46,7 +39,7 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
     SpotifyRepeatState.off
   );
   const getRepeatState = async () => {
-    const repeatState = (await state.player?.getCurrentState())?.repeat_mode;
+    const repeatState = (await player?.getCurrentState())?.repeat_mode;
     switch (repeatState) {
       case 0:
         setRepeat(SpotifyRepeatState.off);
@@ -64,7 +57,7 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
   };
   const toggleRepeat = async () => {
     const resposne = await fetch(
-      `/api/spotify/player/repeat?repeat=${repeat}&device_id=${state.device_id}`
+      `/api/spotify/player/repeat?repeat=${repeat}&device_id=${device_id}`
     );
     setRepeat((await resposne.json())?.repeat || SpotifyRepeatState.off);
   };
@@ -96,7 +89,7 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
       <div
         className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
-          await state.player?.previousTrack();
+          await player?.previousTrack();
         }}
       >
         <MdSkipPrevious className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />
@@ -106,10 +99,10 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
       <div
         className="hover:cursor-pointer"
         onClick={async () => {
-          await state.player?.togglePlay();
+          await player?.togglePlay();
         }}
       >
-        {!state.active ? (
+        {!active ? (
           <MdPlayCircle className={fullscreen ? "h-20 w-20" : "h-10 w-10"} />
         ) : (
           <MdPauseCircle className={fullscreen ? "h-20 w-20" : "h-10 w-10"} />
@@ -120,7 +113,7 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
       <div
         className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
         onClick={async () => {
-          await state.player?.nextTrack();
+          await player?.nextTrack();
         }}
       >
         <MdSkipNext className={fullscreen ? "h-8 w-8" : "h-6 w-6"} />

@@ -1,19 +1,23 @@
-import { useEffect, useContext, useState, useRef } from "react";
-import { AppContext } from "../../context/context";
-import { ActionType } from "../../context/actions";
 import { getSession, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useSepiaStore } from "../../store/store";
+import FullScreen from "./FullScreen";
 import PlayerControls from "./PlayerControls";
 import SeekBar from "./SeekBar";
 import SideControls from "./SideControls";
 import SongInformation from "./SongInformation";
-import FullScreen from "./FullScreen";
 
 const Player = () => {
+  // global state
+  const player = useSepiaStore((state) => state.player);
+  const device_id = useSepiaStore((state) => state.device_id);
+  const setPlayer = useSepiaStore((state) => state.setPlayer);
+  const togglePlayback = useSepiaStore((state) => state.togglePlayback);
+  const changeTrack = useSepiaStore((state) => state.changeTrack);
+  const changeDeviceId = useSepiaStore((state) => state.changeDeviceId);
+
   // full screen
   const [showFullScreen, setShowFullScreen] = useState(false);
-
-  // getting the AppState from the AppContext
-  const { state, dispatch } = useContext(AppContext);
 
   // cheking the session state for checking Authentication and to get the accessToken
   const { status } = useSession();
@@ -46,13 +50,13 @@ const Player = () => {
           });
 
           // adding the player object to the AppContext
-          dispatch({ type: ActionType.Player, payload: { player: player } });
+          setPlayer(player);
 
           // Event Listener for when the player becomes ready
           player.addListener("ready", async ({ device_id }) => {
             // console.log("Ready with Device ID", device_id);
             // adding the created device of to the Appcontext
-            dispatch({ type: ActionType.Device, payload: { device_id } });
+            changeDeviceId(device_id);
           });
 
           // Event Listener for when the player is not ready
@@ -67,19 +71,8 @@ const Player = () => {
             }
             // setting the state track to the current playing track
             setTrack(playerState.track_window.current_track);
-            dispatch({
-              type: ActionType.SetTrack,
-              payload: {
-                track: playerState.track_window.current_track,
-              },
-            });
-            // dispatching toggle event to AppContext
-            dispatch({
-              type: ActionType.Toggle,
-              payload: {
-                active: !playerState.paused,
-              },
-            });
+            changeTrack(playerState.track_window.current_track);
+            togglePlayback(!playerState.paused);
           });
 
           // connecting the player object to Spotify to get a playback
@@ -88,31 +81,31 @@ const Player = () => {
       }
     };
 
-    if (state.player === undefined && state.device_id === "") {
+    if (player === undefined && device_id === "") {
       setup();
     } else {
       console.log("PLAYER EXISTS");
     }
-  }, [status, state.player, state.device_id, dispatch]);
+  }, [status, player, device_id]);
 
   return (
     <>
-      {state.player !== undefined && state.device_id !== "" && (
+      {player !== undefined && device_id !== "" && (
         <div className="fixed w-full bottom-0 left-0 bg-slate-700 text-white">
           <div className="m-2">
             <div className="flex justify-end  items-center">
               <div className="md:grow-0 grow md:w-3/12 w-9/12">
-                {state.track && <SongInformation />}
+                {track && <SongInformation />}
               </div>
               <div className="flex flex-grow flex-col justify-center items-center align-middle">
                 <PlayerControls fullscreen={false} />
                 <div className="flex-col justify-center hidden md:flex w-5/6">
-                  <SeekBar player={state.player} />
+                  <SeekBar />
                 </div>
               </div>
               <div className="w-3/12 hidden md:block">
                 <SideControls
-                  player={state.player}
+                  player={player}
                   setShowFullScreen={setShowFullScreen}
                 />
               </div>

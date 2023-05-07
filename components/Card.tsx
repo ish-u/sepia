@@ -1,15 +1,15 @@
-import React, { useContext, useState } from "react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { playAlbumPlaylistArtist } from "../library/spotify";
-import { useSession } from "next-auth/react";
-import { AppContext } from "../context/context";
+import { useState } from "react";
 import { MdPlayArrow } from "react-icons/md";
+import { playAlbumPlaylistArtist } from "../library/spotify";
 import fallbackURL from "../public/fallback.jpg";
+import { useSepiaStore } from "../store/store";
 
 export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
   const { data: session } = useSession();
-  const { state } = useContext(AppContext);
+  const device_id = useSepiaStore((state) => state.device_id);
   return (
     <div
       className={`${
@@ -18,11 +18,7 @@ export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
       onClick={async (e) => {
         e.stopPropagation();
         if (session?.accessToken && uri) {
-          await playAlbumPlaylistArtist(
-            uri,
-            session?.accessToken,
-            state.device_id
-          );
+          await playAlbumPlaylistArtist(uri, session?.accessToken, device_id);
         }
       }}
     >

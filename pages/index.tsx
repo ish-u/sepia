@@ -1,9 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
-import { useContext } from "react";
 import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
-import { AppContext } from "../context/context";
 import { useIsLoadingRoute } from "../hooks/useLoading";
 import {
   getFeaturedPlaylists,
@@ -11,6 +9,7 @@ import {
   getRecentPlayed,
   getUserTopItems,
 } from "../library/spotify";
+import { useSepiaStore } from "../store/store";
 
 const Home = ({
   recently,
@@ -25,13 +24,13 @@ const Home = ({
   releases: SpotifyApi.ListOfNewReleasesResponse;
   featured: SpotifyApi.ListOfFeaturedPlaylistsResponse;
 }) => {
-  const { state, dispatch } = useContext(AppContext);
+  const user = useSepiaStore((state) => state.user);
   const { isLoadingRoute } = useIsLoadingRoute();
   return (
     <div className="m-4 mx-32 mb-32">
       <div className="text-4xl mb-8">
         welcome
-        <span className="font-bold mx-2">{state.user?.display_name}</span>
+        <span className="font-bold mx-2">{user?.display_name}</span>
       </div>
 
       <Slider
