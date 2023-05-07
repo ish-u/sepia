@@ -3,8 +3,6 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import { AppProvider } from "../context/context";
-import { useIsLoadingRoute } from "../hooks/useLoading";
 import "../styles/globals.css";
 
 type ExtendedAppProps = AppProps & {
@@ -17,7 +15,6 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: ExtendedAppProps) {
-
   return (
     <SessionProvider session={session}>
       <Head>
@@ -40,11 +37,9 @@ function MyApp({
         />
         <title>sepia</title>
       </Head>
-      <AppProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AppProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 }

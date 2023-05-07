@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
+  MdOpenInFull,
   MdQueueMusic,
   MdVolumeDown,
-  MdVolumeUp,
   MdVolumeMute,
-  MdOpenInFull,
+  MdVolumeUp,
 } from "react-icons/md";
-import { AppContext } from "../../context/context";
+import { useSepiaStore } from "../../store/store";
 
 const SideControls = ({
   player,
@@ -16,8 +16,8 @@ const SideControls = ({
   player: Spotify.Player;
   setShowFullScreen: (value: boolean) => void;
 }) => {
+  const track = useSepiaStore((state) => state.track);
   const [volumne, setVolume] = useState(50);
-  const { state } = useContext(AppContext);
   const setPlayerVolume = async (value: string) => {
     setVolume(parseInt(value));
     await player.setVolume(parseInt(value) / 100);
@@ -50,7 +50,7 @@ const SideControls = ({
       <div
         className="p-1 m-1"
         onClick={() => {
-          if (state.track !== undefined) {
+          if (track !== undefined) {
             setShowFullScreen(true);
           }
         }}
