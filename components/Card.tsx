@@ -64,10 +64,12 @@ export const Card = ({
             <Image
               className={rounded ? "rounded-full" : "rounded-md"}
               src={img?.url || fallbackURL}
-              height={"144px"}
+              height={144}
               layout="fixed"
-              objectFit="cover"
-              width={"144px"}
+              style={{
+                objectFit: "cover",
+              }}
+              width={144}
               alt={type + " art"}
             />
             <div className="absolute right-4 bottom-4">

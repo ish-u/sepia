@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "../../../library/prisma";
 import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
+import prisma from "../../../library/prisma";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID || "";
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET || "";

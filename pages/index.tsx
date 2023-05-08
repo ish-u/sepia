@@ -122,7 +122,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: {},
+    redirect: {
+      destination: "/auth/signin",
+      permanent: false,
+    },
   };
 }
 

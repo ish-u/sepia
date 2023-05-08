@@ -1,5 +1,5 @@
-import { getProviders, signIn } from "next-auth/react";
 import { InferGetServerSidePropsType } from "next";
+import { getProviders, signIn } from "next-auth/react";
 import Image from "next/image";
 import SPotifyIcon from "../../public/Spotify_Icon_RGB_Green.png";
 export default function SignIn({
@@ -23,8 +23,8 @@ export default function SignIn({
                 }
               >
                 <Image
-                  height="44px"
-                  width="44px"
+                  height={44}
+                  width={44}
                   src={SPotifyIcon}
                   alt="Spotify Logo"
                 ></Image>
