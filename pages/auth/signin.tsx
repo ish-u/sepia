@@ -1,10 +1,12 @@
 import { InferGetServerSidePropsType } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import SPotifyIcon from "../../public/Spotify_Icon_RGB_Green.png";
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const callbackUrl = useSearchParams()?.get("callbackUrl") ?? "/";
   return (
     <>
       {providers
@@ -18,7 +20,7 @@ export default function SignIn({
                 className="text-white drop-shadow-xl text-2xl flex flex-row items-center justify-center align-middle p-4 my-2 hover:scale-105 duration-150 ease-in-out bg-black rounded-full"
                 onClick={() =>
                   signIn(provider.id, {
-                    callbackUrl: "/",
+                    callbackUrl: callbackUrl,
                   })
                 }
               >
