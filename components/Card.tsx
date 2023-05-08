@@ -61,17 +61,17 @@ export const Card = ({
           className="p-2 m-2 w-full h-full items-center flex flex-col bg-slate-500 hover:bg-slate-600 duration-300 text-white rounded-xl"
         >
           <div className="px-4 py-1 pt-4 relative">
-            <Image
-              className={rounded ? "rounded-full" : "rounded-md"}
-              src={img?.url || fallbackURL}
-              height={144}
-              layout="fixed"
-              style={{
-                objectFit: "cover",
-              }}
-              width={144}
-              alt={type + " art"}
-            />
+            <div className="relative w-[144px] h-[144px]">
+              <Image
+                className={rounded ? "rounded-full" : "rounded-md"}
+                src={img?.url || fallbackURL}
+                fill={true}
+                style={{
+                  objectFit: "cover",
+                }}
+                alt={type + " art"}
+              />
+            </div>
             <div className="absolute right-4 bottom-4">
               <Play show={onHover} uri={uri} />
             </div>

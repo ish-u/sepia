@@ -1,10 +1,12 @@
-import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
-import { getSession, useSession } from "next-auth/react";
-import Image from "next/image";
-import TrackList from "../../components/TrackList";
+import { GetStaticPropsContext } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { Play } from "../../components/Card";
+import TrackList from "../../components/TrackList";
 import {
   getAlbum,
   getServerAccessToken,
@@ -12,8 +14,6 @@ import {
   likeAlbum,
   unlikeAlbum,
 } from "../../library/spotify";
-import { Play } from "../../components/Card";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 const getFormattedTime = (seconds: number) => {
   return (
@@ -79,7 +79,6 @@ const Album = ({
             src={album.images[0].url}
             height={240}
             width={240}
-            layout="fixed"
             alt="Album Cover"
           />
         </div>
