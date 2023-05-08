@@ -30,8 +30,8 @@ const FullScreen = ({
               <div className="w-full md:w-1/4 h-4/6 md:h-full flex justify-center md:justify-end items-center md:items-end px-20 md:p-4">
                 <Image
                   objectFit="contain"
-                  height={track.album.images[2].height || ""}
-                  width={track.album.images[2].width || ""}
+                  height={track.album.images[2].height ?? undefined}
+                  width={track.album.images[2].width ?? undefined}
                   src={track.album.images[2].url}
                   alt="Cover"
                 ></Image>

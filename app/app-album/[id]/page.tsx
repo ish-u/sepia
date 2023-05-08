@@ -37,7 +37,7 @@ type Props = {
 };
 export async function generateMetadata(
   { params, searchParams }: Props,
-  parent?: ResolvingMetadata
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { id } = params;
   try {
@@ -50,7 +50,9 @@ export async function generateMetadata(
       },
     };
   } catch (e) {
-    return {};
+    return {
+      title: "Album Does not exists",
+    };
   }
 }
 
