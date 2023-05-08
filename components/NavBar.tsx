@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import {
   MdAccountCircle,
@@ -18,8 +18,9 @@ import { MenuItem } from "./Menu/MenuItem";
 
 const BackButton = () => {
   const router = useRouter();
+  const pathName = usePathname();
   const goBack = () => {
-    if (router.pathname !== "/") {
+    if (pathName !== "/") {
       router.back();
     }
   };
@@ -45,12 +46,12 @@ const NavButton = ({
   link: string;
   icon: React.ReactNode;
 }) => {
-  const router = useRouter();
+  const pathName = usePathname();
   return (
     <Link href={link}>
       <div
         className={`p-2 m-2 mx-3 rounded-md text-white  
-        ${router.pathname === link ? "bg-slate-700" : "bg-slate-500"} 
+        ${pathName === link ? "bg-slate-700" : "bg-slate-500"} 
         flex items-center text-md hover:cursor-pointer 
         duration-150 ease-in-out hover:bg-slate-700 font-semibold
         `}

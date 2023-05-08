@@ -1,4 +1,3 @@
-"use client";
 import { useSession } from "next-auth/react";
 import { ReactElement, useEffect } from "react";
 import { SpotifyUser } from "../pages/api/spotify/user/me";
