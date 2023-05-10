@@ -18,6 +18,8 @@ export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
       } rounded-full  p-4 text-3xl bg-neutral-500 hover:cursor-pointer w-fit animate-appear`}
       onClick={async (e) => {
         e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+        console.log(e, e.isPropagationStopped());
         if (session?.accessToken && uri) {
           await playAlbumPlaylistArtist(uri, session?.accessToken, device_id);
         }
@@ -51,7 +53,10 @@ export const Card = ({
 
   return (
     <div className="w-52 h-64">
-      <Link href={`/${type === ("album" || "single") ? "album" : type}/${id}`}>
+      <Link
+        shallow={true}
+        href={`/${type === ("album" || "single") ? "album" : type}/${id}`}
+      >
         <div
           onMouseEnter={() => {
             setOnHover(true);

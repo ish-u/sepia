@@ -1,3 +1,4 @@
+"use client";
 export const Loader = () => {
   return (
     <div className="fixed m-8 w-full flex items-center justify-center">

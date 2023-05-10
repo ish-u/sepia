@@ -1,8 +1,8 @@
+"use client";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
 import {
   MdAccountCircle,
   MdArrowBack,
@@ -48,7 +48,7 @@ const NavButton = ({
 }) => {
   const pathName = usePathname();
   return (
-    <Link href={link}>
+    <Link shallow={true} href={link}>
       <div
         className={`p-2 m-2 mx-3 rounded-md text-white  
         ${pathName === link ? "bg-slate-700" : "bg-slate-500"} 

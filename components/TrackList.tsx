@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -81,7 +81,7 @@ export const Track = ({
               track.artists.map((artist, idx) => {
                 return (
                   <div className="mr-1 p-0" key={artist.id}>
-                    <Link href={`/artist/${artist.id}`}>
+                    <Link shallow={true} href={`/artist/${artist.id}`}>
                       <span className="hover:underline hover:text-black">
                         <>{artist.name}</>
                       </span>
@@ -94,7 +94,9 @@ export const Track = ({
         </div>
         {album && (
           <div className="flex text-lg font-semibold hover:underline mr-12 w-3/6 line-clamp-1">
-            <Link href={`/album/${album?.id}`}>{album?.name}</Link>
+            <Link shallow={true} href={`/album/${album?.id}`}>
+              {album?.name}
+            </Link>
           </div>
         )}
       </div>
