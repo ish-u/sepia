@@ -1,3 +1,4 @@
+"use client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,6 +18,8 @@ export const Play = ({ show, uri }: { show: boolean; uri?: string }) => {
       } rounded-full  p-4 text-3xl bg-neutral-500 hover:cursor-pointer w-fit animate-appear`}
       onClick={async (e) => {
         e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+        console.log(e, e.isPropagationStopped());
         if (session?.accessToken && uri) {
           await playAlbumPlaylistArtist(uri, session?.accessToken, device_id);
         }
@@ -50,7 +53,10 @@ export const Card = ({
 
   return (
     <div className="w-52 h-64">
-      <Link href={`/${type === ("album" || "single") ? "album" : type}/${id}`}>
+      <Link
+        shallow={true}
+        href={`/${type === ("album" || "single") ? "album" : type}/${id}`}
+      >
         <div
           onMouseEnter={() => {
             setOnHover(true);
@@ -61,15 +67,17 @@ export const Card = ({
           className="p-2 m-2 w-full h-full items-center flex flex-col bg-slate-500 hover:bg-slate-600 duration-300 text-white rounded-xl"
         >
           <div className="px-4 py-1 pt-4 relative">
-            <Image
-              className={rounded ? "rounded-full" : "rounded-md"}
-              src={img?.url || fallbackURL}
-              height={"144px"}
-              layout="fixed"
-              objectFit="cover"
-              width={"144px"}
-              alt={type + " art"}
-            />
+            <div className="relative w-[144px] h-[144px]">
+              <Image
+                className={rounded ? "rounded-full" : "rounded-md"}
+                src={img?.url || fallbackURL}
+                fill={true}
+                style={{
+                  objectFit: "cover",
+                }}
+                alt={type + " art"}
+              />
+            </div>
             <div className="absolute right-4 bottom-4">
               <Play show={onHover} uri={uri} />
             </div>

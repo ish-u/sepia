@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -54,13 +55,14 @@ export const Track = ({
       >
         {showIdx && (showPlay ? <FiPlay /> : idx ? idx : track.track_number)}
         {!showIdx && img && (
-          <div className="flex flex-col justify-center align-middle relative ">
+          <div className="flex flex-col justify-center align-middle relative">
             <Image
               src={img.url}
               height={42}
               width={42}
-              objectFit="contain"
-              layout="fixed"
+              style={{
+                objectFit: "contain",
+              }}
               alt="Track Image"
             />
             {showPlay && (
@@ -79,17 +81,12 @@ export const Track = ({
               track.artists.map((artist, idx) => {
                 return (
                   <div className="mr-1 p-0" key={artist.id}>
-                    <Link
-                      className="flex flex-col"
-                      href={`/artist/${artist.id}`}
-                    >
+                    <Link shallow={true} href={`/artist/${artist.id}`}>
                       <span className="hover:underline hover:text-black">
                         <>{artist.name}</>
                       </span>
                     </Link>
-                    <span>
-                      <>{idx !== track.artists.length - 1 ? ", " : ""}</>
-                    </span>
+                    {idx !== track.artists.length - 1 ? ", " : ""}
                   </div>
                 );
               })}
@@ -97,7 +94,9 @@ export const Track = ({
         </div>
         {album && (
           <div className="flex text-lg font-semibold hover:underline mr-12 w-3/6 line-clamp-1">
-            <Link href={`/album/${album?.id}`}>{album?.name}</Link>
+            <Link shallow={true} href={`/album/${album?.id}`}>
+              {album?.name}
+            </Link>
           </div>
         )}
       </div>

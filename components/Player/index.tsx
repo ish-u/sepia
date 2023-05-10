@@ -1,3 +1,4 @@
+"use client";
 import { getSession, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useSepiaStore } from "../../store/store";

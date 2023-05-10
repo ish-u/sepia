@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
 import { useIsLoadingRoute } from "../hooks/useLoading";
@@ -10,6 +10,7 @@ import {
   getUserTopItems,
 } from "../library/spotify";
 import { useSepiaStore } from "../store/store";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Home = ({
   recently,
@@ -86,7 +87,7 @@ const Home = ({
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (session?.accessToken) {
     const recently: SpotifyApi.TrackObjectFull[] = (
       (await getRecentPlayed(
@@ -122,7 +123,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: {},
+    redirect: {
+      destination: "/auth/signin",
+      permanent: false,
+    },
   };
 }
 

@@ -259,6 +259,10 @@ export const getAlbum = async (access_token: string, id: string) => {
     },
   });
   const data = await res.json();
+  console.log(data.error);
+  if (data?.error?.status === 400) {
+    throw new Error("ALBUM DOES NOT EXISTS");
+  }
   return data;
 };
 

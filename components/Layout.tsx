@@ -1,3 +1,4 @@
+"use client";
 import { useSession } from "next-auth/react";
 import { ReactElement, useEffect } from "react";
 import { SpotifyUser } from "../pages/api/spotify/user/me";
@@ -34,12 +35,7 @@ export default function Layout({ children }: { children: ReactElement }) {
           <Player />
         </>
       )}
-      {status === "unauthenticated" && (
-        <>
-          {children}
-          <Player />
-        </>
-      )}
+      {status === "unauthenticated" && <>{children}</>}
     </div>
   );
 }

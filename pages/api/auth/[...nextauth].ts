@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "../../../library/prisma";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
+import prisma from "../../../library/prisma";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID || "";
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET || "";
@@ -89,3 +89,56 @@ export default NextAuth({
     strategy: "jwt",
   },
 });
+
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    SpotifyProvider({
+      authorization: `https://accounts.spotify.com/authorize?scope=${scopes}`,
+      clientId: client_id,
+      clientSecret: client_secret,
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user, account }) {
+      // Initial Sign In
+      if (account && user) {
+        token.refreshToken = account.refresh_token;
+        token.accessToken = account.access_token;
+        token.expiresAt = (account.expires_at as number) * 1000;
+        token.userID = account.providerAccountId;
+      }
+
+      // return the original token till it's valid
+      // console.log(
+      //   Date.now(),
+      //   token?.expiresAt ? token.expiresAt : 0,
+      //   Date.now() < (token?.expiresAt ? token.expiresAt : 0),
+      //   token.accessToken
+      // );
+      if (Date.now() < (token?.expiresAt ? token.expiresAt : 0)) {
+        return token;
+      }
+
+      // update token
+      const updatedToken = await refreshAccessToken(token.refreshToken || "");
+      if (updatedToken) {
+        token.accessToken = updatedToken.access_token;
+        token.expiresAt = Date.now() + updatedToken.expires_in * 1000;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken as string;
+      session.userID = token.userID;
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
+};

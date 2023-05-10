@@ -1,20 +1,20 @@
-import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { GetStaticPropsContext } from "next";
+import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Image from "next/image";
 import { Track } from "../../components/TrackList";
-import Head from "next/head";
 import {
-  getArtist,
-  getTopTracks,
-  getArtistAlbum,
   checkFollowing,
   followArtist,
-  unfollowArtist,
+  getArtist,
+  getArtistAlbum,
   getServerAccessToken,
+  getTopTracks,
+  unfollowArtist,
 } from "../../library/spotify";
 
-import Card, { Play } from "../../components/Card";
 import { useEffect, useState } from "react";
+import Card, { Play } from "../../components/Card";
 
 const Artist = ({
   artist,
@@ -70,16 +70,18 @@ const Artist = ({
       </Head>
       {/* TOP */}
       <div className="flex items-center">
-        <div className="relative p-8">
-          <Image
-            className="rounded-full"
-            src={artist.images[0].url}
-            height={240 || artist.images[0].height}
-            width={240 || artist.images[0].width}
-            layout="fixed"
-            objectFit="cover"
-            alt="Artist Picture"
-          ></Image>
+        <div className={`relative p-8`}>
+          <div className="relative w-[240px] h-[240px]">
+            <Image
+              className="rounded-full"
+              src={artist.images[0].url}
+              fill={true}
+              style={{
+                objectFit: "cover",
+              }}
+              alt="Artist Picture"
+            ></Image>
+          </div>
         </div>
 
         <div className="px-8">

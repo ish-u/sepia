@@ -1,3 +1,4 @@
+"use client";
 import {
   ReactElement,
   cloneElement,
@@ -55,12 +56,15 @@ export const Menu = ({
   }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="static" ref={menuRef}>
       <MenuButton element={parent} onClick={toggleMenu} />
       {showUserMenu && (
-        <div className="mt-2 w-32 max-w-32 right-0 absolute border bg-slate-500 border-gray-500 rounded-md">
-          {children}
-        </div>
+        <>
+          <div className="absolute right-4 bottom-2 border-l-[8px] border-r-[8px]  border-b-[12px] border-r-transparent border-l-transparent border-b-slate-500"></div>
+          <div className="mt-2 w-32 max-w-32 right-0 absolute border bg-slate-500 border-gray-500 rounded-md">
+            {children}
+          </div>
+        </>
       )}
     </div>
   );
