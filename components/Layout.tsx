@@ -28,13 +28,8 @@ export default function Layout({ children }: { children: ReactElement }) {
   return (
     <div className="max-w-screen-2xl">
       <div className="fixed top-0 left-0 h-full w-full -z-50  bg-gradient-to-b from-[#FFDCCC] to-slate-400"></div>
-      {status === "authenticated" && (
-        <>
-          <NavBar />
-          {children}
-        </>
-      )}
-      {status === "unauthenticated" && <>{children}</>}
+      <NavBar />
+      {children}
       <Player />
     </div>
   );
