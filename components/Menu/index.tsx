@@ -35,7 +35,10 @@ export const Menu = ({
 }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const toggleMenu = () => setShowUserMenu(!showUserMenu);
+  const toggleMenu = () => {
+    console.log(showUserMenu);
+    setShowUserMenu(!showUserMenu);
+  };
   const closeUserMenu = () => setShowUserMenu(false);
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -49,6 +52,7 @@ export const Menu = ({
   };
 
   useEffect(() => {
+    console.log("EVENT");
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
@@ -56,7 +60,7 @@ export const Menu = ({
   }, []);
 
   return (
-    <div className="static" ref={menuRef}>
+    <div className="static" ref={menuRef} onClick={toggleMenu}>
       <MenuButton element={parent} onClick={toggleMenu} />
       {showUserMenu && (
         <>
