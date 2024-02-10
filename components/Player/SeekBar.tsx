@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSepiaStore } from "../../store/store";
 
-const SeekBar = () => {
+const SeekBar = ({ style }: { style?: {} }) => {
   const player = useSepiaStore((state) => state.player);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -38,11 +38,11 @@ const SeekBar = () => {
     };
   }, [player]);
   return (
-    <div className="flex justify-center items-center">
-      <div>{getFormattedTime(position)}</div>
-      <div className="flex flex-grow mx-4">
+    <div className="flex justify-center items-center ">
+      <div style={style}>{getFormattedTime(position)}</div>
+      <div className="flex flex-grow mx-4 accent-slate-500" style={style}>
         <input
-          className="h-1 w-full accent-slate-500"
+          className="h-1 w-full"
           min="0"
           max={duration}
           value={position}
@@ -52,7 +52,7 @@ const SeekBar = () => {
           type="range"
         />
       </div>
-      <div>{getFormattedTime(duration)}</div>
+      <div style={style}>{getFormattedTime(duration)}</div>
     </div>
   );
 };

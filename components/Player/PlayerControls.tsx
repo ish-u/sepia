@@ -13,7 +13,13 @@ import {
 } from "react-icons/md";
 import { SpotifyRepeatState } from "../../pages/api/spotify/player/repeat";
 import { useSepiaStore } from "../../store/store";
-const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
+const PlayerControls = ({
+  fullscreen,
+  style,
+}: {
+  fullscreen: boolean;
+  style?: {};
+}) => {
   // const { state, dispatch } = useContext(AppContext);
   const player = useSepiaStore((state) => state.player);
   const device_id = useSepiaStore((state) => state.device_id);
@@ -68,7 +74,10 @@ const PlayerControls = ({ fullscreen }: { fullscreen: boolean }) => {
   });
 
   return (
-    <div className="flex justify-center align-middle items-center m-1">
+    <div
+      className="flex justify-center align-middle items-center m-1"
+      style={style}
+    >
       {/* SHUFFLE */}
       <div
         className={fullscreen ? "p-2 flex" : "p-2 hidden md:flex"}
