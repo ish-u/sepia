@@ -84,7 +84,9 @@ const Album = ({
         </div>
         <div className="grow py-8 flex flex-col justify-end">
           <div className="text-xs m-2 font-bold">
-            {album.type.toUpperCase()}
+            {album.album_type === "single" && album.total_tracks > 1
+              ? "EP"
+              : album.album_type.toUpperCase()}
           </div>
           <div className="text-6xl font-bold line-clamp-1 py-2">
             {album.name}
@@ -131,7 +133,7 @@ const Album = ({
         {album.copyrights.map((copyright, idx) => {
           return (
             <div className="text-xs font-extralight" key={copyright.text + idx}>
-              {copyright.text}
+              {(copyright.type === "C" ? "© " : "℗ ") + copyright.text}
             </div>
           );
         })}

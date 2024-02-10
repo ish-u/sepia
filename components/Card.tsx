@@ -50,7 +50,6 @@ export const Card = ({
   uri?: string;
 }) => {
   const [onHover, setOnHover] = useState(false);
-
   return (
     <div
       className="relative w-52 h-64"
@@ -66,7 +65,9 @@ export const Card = ({
       </div>
       <Link
         shallow={true}
-        href={`/${type === ("album" || "single") ? "album" : type}/${id}`}
+        href={`/${
+          type === "album" || type === "single" ? "album" : type
+        }/${id}`}
       >
         <div className="p-2 m-2 w-full h-full items-center flex flex-col bg-slate-500 hover:bg-slate-600 duration-300 text-white rounded-xl">
           <div className="px-4 py-1 pt-4 relative">
