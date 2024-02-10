@@ -42,7 +42,7 @@ const SeekBar = () => {
       <div>{getFormattedTime(position)}</div>
       <div className="flex flex-grow mx-4">
         <input
-          className="h-1 w-full"
+          className="h-1 w-full accent-slate-500"
           min="0"
           max={duration}
           value={position}

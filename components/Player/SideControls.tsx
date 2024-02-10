@@ -38,7 +38,7 @@ const SideControls = ({
         {volumne > 50 && <MdVolumeUp className="w-6 h-6" />}
       </div>
       <input
-        className="h-1"
+        className="h-1 accent-slate-500"
         min="0"
         max="100"
         value={volumne}

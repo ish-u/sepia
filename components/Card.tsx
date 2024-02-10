@@ -52,20 +52,23 @@ export const Card = ({
   const [onHover, setOnHover] = useState(false);
 
   return (
-    <div className="w-52 h-64">
+    <div
+      className="relative w-52 h-64"
+      onMouseEnter={() => {
+        setOnHover(true);
+      }}
+      onMouseLeave={() => {
+        setOnHover(false);
+      }}
+    >
+      <div className="absolute right-4 bottom-20 z-10">
+        <Play show={onHover} uri={uri} />
+      </div>
       <Link
         shallow={true}
         href={`/${type === ("album" || "single") ? "album" : type}/${id}`}
       >
-        <div
-          onMouseEnter={() => {
-            setOnHover(true);
-          }}
-          onMouseLeave={() => {
-            setOnHover(false);
-          }}
-          className="p-2 m-2 w-full h-full items-center flex flex-col bg-slate-500 hover:bg-slate-600 duration-300 text-white rounded-xl"
-        >
+        <div className="p-2 m-2 w-full h-full items-center flex flex-col bg-slate-500 hover:bg-slate-600 duration-300 text-white rounded-xl">
           <div className="px-4 py-1 pt-4 relative">
             <div className="relative w-[144px] h-[144px]">
               <Image
@@ -77,9 +80,6 @@ export const Card = ({
                 }}
                 alt={type + " art"}
               />
-            </div>
-            <div className="absolute right-4 bottom-4">
-              <Play show={onHover} uri={uri} />
             </div>
           </div>
           <div className="flex flex-col w-full px-4 py-2">

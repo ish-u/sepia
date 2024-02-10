@@ -22,7 +22,7 @@ const Queue = () => {
   useEffect(() => {}, [track, queue]);
 
   return (
-    <div className="mx-36 p-8">
+    <div className="mx-36 p-8 mb-24">
       <div className="text-4xl">Queue</div>
       <div>
         <div className="text-black/75 font-semibold mt-8 mb-4">Now Playing</div>

@@ -11,7 +11,6 @@ import {
   MdQueueMusic,
   MdSearch,
 } from "react-icons/md";
-import { MenuItem } from "./Menu/MenuItem";
 
 const BackButton = () => {
   const router = useRouter();
@@ -38,25 +37,47 @@ const NavButton = ({
   title,
   link,
   icon,
+  onClick,
 }: {
   title: string;
   link: string;
   icon: React.ReactNode;
+  onClick?: () => void;
 }) => {
   const pathName = usePathname();
   return (
-    <Link shallow={true} href={link}>
-      <div
-        className={`p-2 m-2 mx-3 rounded-md text-white  
+    <>
+      {onClick ? (
+        <div
+          className={`p-2 m-2 mx-3 rounded-md text-white  
         ${pathName === link ? "bg-slate-700" : "bg-slate-500"} 
         flex items-center text-md hover:cursor-pointer 
         duration-150 ease-in-out hover:bg-slate-700 font-semibold
         `}
-      >
-        <div className="px-1 text-xl">{icon}</div>
-        <div className="px-1">{title}</div>
-      </div>
-    </Link>
+          onClick={onClick}
+        >
+          <div className="px-1 text-xl">{icon}</div>
+          <div className="px-0 md:px-1 w-0 md:w-full hidden md:flex">
+            {title}
+          </div>
+        </div>
+      ) : (
+        <Link shallow={true} href={link}>
+          <div
+            className={`p-2 m-2 mx-3 rounded-md text-white  
+        ${pathName === link ? "bg-slate-700" : "bg-slate-500"} 
+        flex items-center text-md hover:cursor-pointer 
+        duration-150 ease-in-out hover:bg-slate-700 font-semibold
+        `}
+          >
+            <div className="px-1 text-xl">{icon}</div>
+            <div className="px-0 md:px-1 w-0 md:w-full hidden md:flex">
+              {title}
+            </div>
+          </div>
+        </Link>
+      )}
+    </>
   );
 };
 
@@ -65,22 +86,23 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="flex items-center  h-24 justify-between backdrop-blur-lg mx-32">
+      <div className="flex items-center h-24 md:justify-between backdrop-blur-lg mx-32">
         <div className="flex items-center">
           <BackButton />
           <NavButton title="Home" icon={<MdHomeFilled />} link="/" />
           <NavButton title="Search" icon={<MdSearch />} link="/search" />
           <NavButton
-            title="Your Library"
+            title="Library"
             icon={<MdLibraryMusic />}
             link="/library"
           />
           <NavButton title="Liked" icon={<MdFavorite />} link="/liked" />
           <NavButton title="Queue" icon={<MdQueueMusic />} link="/queue" />
         </div>
-        <MenuItem
-          name="Sign Out"
+        <NavButton
+          title="Sign Out"
           icon={<MdLogout />}
+          link=""
           onClick={() => signOut()}
         />
       </div>
