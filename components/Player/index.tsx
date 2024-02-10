@@ -84,7 +84,7 @@ const Player = () => {
 
     if (player === undefined && device_id === "") {
       setup();
-    } else {
+    } else if (player && device_id) {
       console.log("PLAYER EXISTS");
     }
   }, [

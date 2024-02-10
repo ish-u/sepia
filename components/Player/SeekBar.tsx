@@ -21,7 +21,7 @@ const SeekBar = () => {
   useEffect(() => {
     const currentPosition = setInterval(async () => {
       if (player) {
-        const current = await player.getCurrentState();
+        const current = await player?.getCurrentState();
         if (!current?.paused) {
           const songDuration: number =
             (current?.track_window.current_track.duration_ms as number) / 1000;

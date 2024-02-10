@@ -64,37 +64,37 @@ const Library = () => {
 
   return (
     <>
-      <div className="mx-32 my-4 mb-32">
-        <div className="flex justify-start">
-          <div
-            className={`p-2 ml-4  font-semibold rounded-md ${
-              toShow === "albums" ? "bg-slate-600" : "bg-slate-400"
-            } text-white hover:bg-slate-500`}
-            onClick={() => {
-              setToShow("albums");
-            }}
-          >
-            Albums
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="mx-32 my-4 mb-32">
+          <div className="flex justify-start">
+            <div
+              className={`p-2 ml-4  font-semibold rounded-md ${
+                toShow === "albums" ? "bg-slate-600" : "bg-slate-400"
+              } text-white hover:bg-slate-500`}
+              onClick={() => {
+                setToShow("albums");
+              }}
+            >
+              Albums
+            </div>
+            <div
+              className={`p-2 ml-4  font-semibold rounded-md ${
+                toShow === "playlists" ? "bg-slate-600" : "bg-slate-400"
+              } text-white hover:bg-slate-500`}
+              onClick={() => {
+                setToShow("playlists");
+              }}
+            >
+              Playlists
+            </div>
           </div>
-          <div
-            className={`p-2 ml-4  font-semibold rounded-md ${
-              toShow === "playlists" ? "bg-slate-600" : "bg-slate-400"
-            } text-white hover:bg-slate-500`}
-            onClick={() => {
-              setToShow("playlists");
-            }}
-          >
-            Playlists
-          </div>
-        </div>
-        {isLoading ? (
-          <Loader />
-        ) : (
           <div className="flex justify-start flex-wrap">
             {toShow === "albums" &&
               albums &&
               albums.map((album) => (
-                <div className="m-4" key={album.id}>
+                <div className="ml-2 mr-5 my-2" key={album.id}>
                   <Card
                     id={album.id}
                     img={album.images[0]}
@@ -109,7 +109,7 @@ const Library = () => {
             {toShow === "playlists" &&
               playlists &&
               playlists.map((playlist) => (
-                <div className="m-4" key={playlist.id}>
+                <div className="ml-2 mr-5 my-2" key={playlist.id}>
                   <Card
                     id={playlist.id}
                     img={playlist.images[0]}
@@ -122,8 +122,8 @@ const Library = () => {
                 </div>
               ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };
