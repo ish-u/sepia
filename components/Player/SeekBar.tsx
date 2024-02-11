@@ -49,6 +49,7 @@ const SeekBar = ({ style }: { style?: {} }) => {
           onChange={(e) => {
             seek(parseInt(e.target.value));
           }}
+          style={style}
           type="range"
         />
       </div>

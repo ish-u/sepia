@@ -23,14 +23,17 @@ const SongInformation = () => {
             {(track && track?.name) || "..."}
           </Link>
         </div>
-        <div className="text-sm hover:underline">
+        <div className="text-sm ">
           {track &&
-            track?.artists?.map((artist) => (
+            track?.artists?.map((artist, idx) => (
               <Link
                 key={artist.name}
                 href={`/artist/${artist.uri.split(":").at(-1)}`}
               >
-                {artist.name + " "}
+                <span className="hover:underline">
+                  <>{artist.name}</>
+                </span>
+                {idx !== track.artists.length - 1 ? ", " : ""}
               </Link>
             ))}
         </div>

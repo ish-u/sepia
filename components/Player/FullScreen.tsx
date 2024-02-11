@@ -124,7 +124,7 @@ const FullScreen = ({
                   {track.name}
                 </div>
                 <div className="text-xl md:text-3xl">
-                  {track.artists.map((artist) => artist.name).toString()}
+                  {track.artists.map((artist) => artist.name).join(", ")}
                 </div>
               </div>
             </div>
@@ -133,6 +133,7 @@ const FullScreen = ({
                 <SeekBar
                   style={{
                     color: textColor,
+                    backgroudnColor: "transparent",
                   }}
                 />
               </div>

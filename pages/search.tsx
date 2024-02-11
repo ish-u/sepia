@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Slider from "../components/Slider";
 import { Track } from "../components/TrackList";
 
@@ -19,10 +19,10 @@ const Search = () => {
   }, [query]);
 
   return (
-    <div className="px-24 flex flex-col mb-24">
+    <div className="px-32 flex flex-col mb-24">
       <div>
         <input
-          className="rounded-md px-4 py-2 my-4  text-xl outline-none focus:outline-none mx-auto"
+          className="rounded-md px-4 py-2 my-4 text-xl outline-none focus:outline-none mx-auto"
           type="text"
           value={query}
           onChange={(e) => {
