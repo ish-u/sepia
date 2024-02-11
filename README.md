@@ -1,6 +1,6 @@
 # sepia
 
-### A Spotify Client made using NextJS, NextAuth, TailwindCSS
+### A Spotify Client made using NextJS and TailwindCSS
 
 ---
 
