@@ -12,9 +12,7 @@ const FullScreen = ({
 }) => {
   const track = useSepiaStore((state) => state.track);
   const player = useSepiaStore((state) => state.player);
-
-  const [startColor, setStartColor] = useState("#64748b");
-  const [endColor, setEndColor] = useState("#FFDCCC");
+  const [gradient, setGradient] = useState("");
   const [textColor, setTextColor] = useState("");
 
   function getContrastColor(r: number, g: number, b: number) {
@@ -72,11 +70,18 @@ const FullScreen = ({
           colors.sort(function (a, b) {
             return b[1] - a[1];
           });
-          console.log(colors);
 
           const topColor = colors[0][0];
-
-          setStartColor(topColor.split(")")[0] + ", 1)");
+          let gradient = "linear-gradient(to top left, ";
+          const steps = 10;
+          for (let i = 0; i < steps; i += 1) {
+            const startPercentage = ((i * 1) / steps) * 100;
+            const index = Math.floor((startPercentage * colors.length) / 100);
+            console.log(index);
+            gradient += `${colors[index][0]} ${startPercentage}%, `;
+          }
+          gradient += "#FFDCCC)";
+          setGradient(gradient);
           const endRGB = topColor
             .split("(")[1]
             ?.split(")")[0]
@@ -93,11 +98,12 @@ const FullScreen = ({
       {show && track && player && (
         <>
           <div
-            className="animate-gradient fixed top-0 left-0 flex flex-col md:block w-full h-full"
+            className="animate-gradient fixed -top-1/2 -left-1/2 flex flex-col md:block w-[200%] h-[200%]"
             style={{
-              backgroundImage: `linear-gradient(to right, ${startColor} , ${endColor})`,
+              backgroundImage: gradient,
             }}
-          >
+          ></div>
+          <div className="fixed top-0 left-0 flex flex-col md:block w-full h-full">
             <div className="h-4/6 w-full md:w-5/6 flex flex-col justify-end md:flex-row md:m-auto">
               <div className="w-full md:w-1/4 h-4/6 md:h-full flex justify-center md:justify-end items-center md:items-end px-20 md:p-4">
                 <NextImage

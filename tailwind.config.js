@@ -14,16 +14,19 @@ module.exports = {
         },
         gradient: {
           "0% ": {
-            "background-size": "300% 300%",
+            "background-size": "5000% 5000%",
             "background-position": "10% 0%",
+            transform: "rotate(0deg)",
           },
           "50%": {
-            "background-size": "300% 300%",
-            "background-position": "91% 100%",
+            "background-size": "5000% 5000%",
+            "background-position": "100% 100%",
+            transform: "rotate(180deg)",
           },
           "100%": {
-            "background-size": "300% 300%",
+            "background-size": "5000% 5000%",
             "background-position": "10% 0%",
+            transform: "rotate(360deg)",
           },
         },
         pulse: {
@@ -40,7 +43,7 @@ module.exports = {
       },
       animation: {
         appear: "appear 150ms",
-        gradient: "gradient 10s ease infinite",
+        gradient: "gradient 100s ease infinite",
         pulse: "pulse 2s ease-in-out infinite",
       },
     },
