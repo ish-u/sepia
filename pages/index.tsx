@@ -49,7 +49,9 @@ const Home = ({
       <Slider
         title={featured.message || ""}
         type="playlist"
-        playlists={featured.playlists.items as SpotifyApi.PlaylistObjectFull[]}
+        playlists={
+          featured?.playlists?.items as SpotifyApi.PlaylistObjectFull[]
+        }
       />
 
       <div className="flex w-full items-center">
@@ -75,7 +77,7 @@ const Home = ({
             <Track
               showArtist={true}
               showIdx={false}
-              img={track.album.images[0]}
+              img={track?.album?.images[0]}
               key={track.id}
               track={track}
             />
@@ -91,7 +93,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (session?.accessToken) {
     const recently: SpotifyApi.TrackObjectFull[] = (
       (await getRecentPlayed(
-        session?.accessToken || ""
+        session?.accessToken || "",
       )) as SpotifyApi.UsersRecentlyPlayedTracksResponse
     ).items
       .map((item) => item.track)
@@ -108,7 +110,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       await getFeaturedPlaylists(session.accessToken);
 
     const releases: SpotifyApi.ListOfNewReleasesResponse = await getNewReleases(
-      session.accessToken
+      session.accessToken,
     );
 
     return {
